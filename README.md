@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <img src="public/bird.svg" alt="Multilingo brand" height="250" />
 
-## Getting Started
+  <strong>Multilingo</strong>: Your Gateway to Global Communication
 
-First, run the development server:
+  [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE.md)
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Mulilingo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Embark on an exciting journey of language learning with Multilingo, a platform inspired by Duolingo, the globally recognized language learning application. Our mission is to make language learning an enjoyable and rewarding experience.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- 🌍 Multiple Languages: Choose from a wide range of languages.
+- 📚 Detailed Courses: Extensive sections, units, and lessons per course.
+- ❓ Diverse Questions: Variety of question types for an engaging learning process.
+- 📈 Track Progress: Easy-to-use system to monitor your learning progress.
+- 🏆 Leaderboard: Compare your achievements with other users.
+- 💎 Buy Diamonds: Purchase diamonds to earn more hearts.
+- 👤 Profile Management: Keep your profile information updated.
+- ⚙️ Custom Settings: Personalize your learning experience.
+- 🛠️ Admin Panel: Dedicated panel for course data management.
+- 🎵 Sound Effects: Enhance user experience with engaging audio cues.
 
-## Learn More
+## Technologies
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 🚀 NextJS (TypeScript): Powering the `app` router.
+- 🗄️ PostgreSQL: Reliable server technology from Neon.
+- 🧩 Drizzle ORM: Streamlining database operations.
+- 🗣️ TTS (Text-to-Speech): Leveraging elevenlabs for voice output.
+- 🔒 Clerk: Ensuring secure authentication.
+- 🎨 SVG Animation: Enhancing user experience with dynamic visuals.
