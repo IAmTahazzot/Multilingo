@@ -1,22 +1,28 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from 'next'
+import './globals.css'
+import { cn } from '@/lib/utils'
+import { displayFont, bodyFont } from '@/lib/fonts'
 
 export const metadata: Metadata = {
-  title: "Multilingo: Language Learning Platform",
-  description: "Learn a new language with MultiLingo! 🌍📚🎉",
-};
+  title: 'Multilingo: Language Learning Platform',
+  description: 'Learn a new language with MultiLingo! 🌍📚🎉'
+}
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang='en'>
+      <body
+        className={cn(
+          displayFont.variable,
+          bodyFont.variable,
+          bodyFont.className
+        )}>
+        {children}
+      </body>
     </html>
-  );
+  )
 }

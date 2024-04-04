@@ -3,5 +3,23 @@
 @tailwind utilities;
 
 body {
-  @apply min-h-screen
+  @apply min-h-screen;
+}
+
+@layer base {
+  :root {
+    --color-white: #fff;
+    --color-black: #000;
+    --color-primary: #58cc01;
+    --color-secondary: #1cb0f6;
+    --color-tertiary: #ce82ff;
+    --color-success: #00cd9c;
+    --color-premium: #3c4dfe;
+
+    --shadow-primary-color: #429700;
+    --shadow-secondary-color: #1792ca;
+    --shadow-tertiary-color: #9b57c9;
+    --shadow-success-color: #008a67;
+    --shadow-premium-color: #2c3ad4;
+  }
 }
