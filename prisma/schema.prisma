@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Tier {
+  FREE
+  BASIC
+  PREMIUM
+}
+
+model User {
+  id               String             @id @default(cuid())
+  email            String             @unique
+  username         String             @unique
+  name             String?
+  password         String
+  imageUrl         String?
+  xp               Int                @default(0)
+  hearts           Int                @default(5)
+  streak           Int                @default(0)
+  dimond           Int                @default(100)
+  role             Role               @default(USER)
+  tier             Tier               @default(FREE)
+  tierExpiration   DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  CourseEnrollment CourseEnrollment[]
+  LessonProgress   LessonProgress[]
+}
+
+model CourseEnrollment {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LessonProgress {
+  id                 String   @id @default(cuid())
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String
+  courseId           String
+  lessonId           String
+  unitId             String
+  sectionId          String
+  unit               Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  section            Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  course             Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson             Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completedQuestions Int      @default(0)
+  completed          Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Course {
+  id               String             @id @default(cuid())
+  title            String
+  description      String
+  language         String             @unique
+  image            String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  Section          Section[]
+  CourseEnrollment CourseEnrollment[]
+  LessonProgress   LessonProgress[]
+}
+
+model Section {
+  id             String           @id @default(cuid())
+  title          String
+  description    String
+  course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Unit           Unit[]
+  LessonProgress LessonProgress[]
+}
+
+model Unit {
+  id             String           @id @default(cuid())
+  title          String
+  description    String
+  section        Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId      String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Lesson         Lesson[]
+  LessonProgress LessonProgress[]
+}
+
+model Lesson {
+  id             String           @id @default(cuid())
+  title          String
+  description    String
+  unit           Unit             @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unitId         String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Question       Question[]
+  LessonProgress LessonProgress[]
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  FILL_IN_THE_BLANK
+  TRUE_FALSE
+}
+
+model Question {
+  id        String       @id @default(cuid())
+  lessonId  String
+  title     String
+  type      QuestionType
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  lesson    Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  Option    Option[]
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  title      String
+  imageUrl   String?
+  isCorrect  Boolean  @default(false)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
