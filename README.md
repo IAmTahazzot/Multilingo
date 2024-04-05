@@ -27,7 +27,7 @@ Embark on an exciting journey of language learning with Multilingo, a platform i
 
 - 🚀 NextJS (TypeScript): Powering the `app` router.
 - 🗄️ PostgreSQL: Reliable server technology from Neon.
-- 🧩 Drizzle ORM: Streamlining database operations.
+- 🧩 Prisma ORM: Streamlining database operations.
 - 🗣️ TTS (Text-to-Speech): Leveraging elevenlabs for voice output.
 - 🔒 Clerk: Ensuring secure authentication.
 - 🎨 SVG Animation: Enhancing user experience with dynamic visuals.
