@@ -21,6 +21,12 @@ body {
     --shadow-tertiary-color: #9b57c9;
     --shadow-success-color: #008a67;
     --shadow-premium-color: #2c3ad4;
+
+    --color-primary-deep: #429700;
+    --color-secondary-deep: #1792ca;
+    --color-tertiary-deep: #9b57c9;
+    --color-success-deep: #008a67;
+    --color-premium-deep: #2c3ad4;
   }
 }
 

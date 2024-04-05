@@ -15,12 +15,28 @@ const config: Config = {
       colors: {
         primary: {
           default: 'var(--color-primary)',
-          shadow: '#46a302'
+          shadow: 'var(--color-primary-deep)',
+          deep: 'var(--color-primary-deep)',
+        },
+        secondary: {
+          default: 'var(--color-secondary)',
+          deep: 'var(--color-secondary-deep)'
+        },
+        tertiary: {
+          default: 'var(--color-tertiary)',
+          shadow: 'var(--color-tertiary-deep)',
+          deep: 'var(--color-tertiary-deep)',
+        },
+        success: {
+          default: 'var(--color-success)',
+          shadow: 'var(--color-success-deep)',
+          deep: 'var(--color-success-deep)',
         },
         premium: {
           default: 'var(--color-premium)',
-          shadow: '#3f22ec'
-        }
+          shadow: 'var(--color-premium-deep)',
+          deep: 'var(--color-premium-deep)',
+        },
       }
     }
   },
