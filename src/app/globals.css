@@ -23,3 +23,28 @@ body {
     --shadow-premium-color: #2c3ad4;
   }
 }
+
+/* Auth page re-design */
+.cl-internal-b3fm6y {
+  @apply hidden
+}
+
+.cl-internal-1fsg6zy {
+  @apply bg-primary-default;
+}
+
+.cl-internal-1fsg6zy:hover {
+  @apply bg-primary-shadow;
+}
+
+.cl-internal-15amzqo {
+  @apply text-primary-default;
+}
+
+.cl-internal-15amzqo:hover {
+  @apply text-primary-shadow;
+}
+
+.cl-internal-17ydaof {
+  @apply shadow-none;
+}
