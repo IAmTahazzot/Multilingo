@@ -68,10 +68,8 @@ model LessonProgress {
 
 model Course {
   id               String             @id @default(cuid())
-  title            String
-  description      String
+  name             String
   language         String             @unique
-  image            String?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   Section          Section[]

@@ -8,7 +8,10 @@ const Variants = cva('rounded-xl p-6', {
       secondary: 'bg-secondary-default text-white',
       tertiary: 'bg-tertiary-default text-white',
       success: 'bg-success-default text-white',
-      premium: 'bg-premium-default text-white'
+      premium: 'bg-premium-default text-white',
+      danger: 'bg-red-500 text-white',
+      default:
+        'border-x-2 border-b-4 border-t-2 border-neutral-200 hover:bg-neutral-100 transition-colors duration-200'
     }
   },
   defaultVariants: {
@@ -18,8 +21,16 @@ const Variants = cva('rounded-xl p-6', {
 
 type CardProps = {
   children?: React.ReactNode
+  className?: string
+  onClick?: () => void
 } & VariantProps<typeof Variants>
 
-export const Card = ({ children, theme }: CardProps) => {
-  return <div className={cn(Variants({ theme }))}>{children}</div>
+export const Card = ({ children, theme, className, onClick }: CardProps) => {
+  return (
+    <div
+      className={cn(Variants({ theme }), className)}
+      onClick={onClick}>
+      {children}
+    </div>
+  )
 }

@@ -3,20 +3,26 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import Link from 'next/link'
 
 const Variants = cva(
-  'flex items-center relative px-4 uppercase rounded-2xl font-display border-b-[4px] active:border-none active:translate-y-[4px] hover:brightness-110 transition-colors uppercase',
+  'flex items-center relative px-4 uppercase rounded-2xl font-display border-b-[4px] active:translate-y-[4px] hover:brightness-110 transition-colors uppercase disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       theme: {
-        primary: 'bg-primary-default border-primary-deep text-white',
-        secondary: 'bg-secondary-default border-secondary-deep text-white',
-        tertiary: 'bg-tertiary-default border-tertiary-deep text-white',
-        success: 'bg-success-default border-success-deep text-white',
-        premium: 'bg-premium-default border-premium-deep text-white',
+        primary:
+          'bg-primary-default border-primary-deep text-white active:border-none',
+        secondary:
+          'bg-secondary-default border-secondary-deep text-white active:border-none',
+        tertiary:
+          'bg-tertiary-default border-tertiary-deep text-white active:border-none',
+        success:
+          'bg-success-default border-success-deep text-white active:border-none',
+        premium:
+          'bg-premium-default border-premium-deep text-white active:border-none',
         white: 'bg-white text-primary-default border-slate-300',
+        danger: 'bg-red-500 border-red-700 text-white active:border-none',
         outline:
           'border-2 border-[#84d8ff] bg-sky-50 text-sky-400 hover:brightness-100 active:border-2 active:translate-y-0',
         ghost:
-          'bg-transparent text-neutral-600 border-b-0 active:translate-y-0 hover:brightness-100 hover:bg-neutral-100'
+          'bg-transparent border-2 border-transparent text-neutral-600 active:translate-y-0 hover:brightness-100 hover:bg-neutral-100'
       },
       size: {
         default: 'h-[50px]',
@@ -36,6 +42,8 @@ type ButtonProps = {
   icon?: React.ReactNode
   type?: 'button' | 'link' | 'submit' | 'reset'
   href?: string
+  disabled?: boolean
+  onClick?: () => void
 
   // button height in pixels
   height?: number
@@ -52,11 +60,13 @@ export const Button = ({
   width,
   text,
   icon,
+  onClick,
   type = 'button',
   href,
   className,
   theme,
-  size
+  size,
+  disabled,
 }: ButtonProps) => {
   if (type === 'link') {
     return (
@@ -76,7 +86,7 @@ export const Button = ({
           width: width && `${width}px`
         }}>
         {icon && <div className='w-8 h-8 mr-3 flex items-center'>{icon}</div>}
-        <span>
+        <span className={cn(text && 'h-5')}>
           {text ? text : children ? children : 'Empty button is forbidden'}
         </span>
       </Link>
@@ -85,8 +95,15 @@ export const Button = ({
 
   return (
     <button
+      disabled={disabled}
+      onClick={onClick}
       type={type}
-      className={cn('flex items-center', Variants({ theme, size }), className)}
+      className={cn(
+        'flex items-center',
+        Variants({ theme, size }),
+        icon ? 'text-left' : 'justify-center',
+        className
+      )}
       style={{
         height: height && `${height}px`,
         width: width && `${width}px`
