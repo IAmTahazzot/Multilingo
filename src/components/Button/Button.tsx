@@ -15,7 +15,7 @@ const Variants = cva(
         white: 'bg-white text-primary-default border-slate-300',
         danger: 'bg-red-500 border-red-700 text-white active:border-none',
         outline:
-          'border-2 border-[#84d8ff] bg-sky-50 text-sky-400 hover:brightness-100 active:border-2 active:translate-y-0',
+          'border-2 border-[#84d8ff] bg-sky-50 text-sky-500 hover:brightness-100 active:border-2 active:translate-y-0',
         ghost:
           'bg-transparent border-2 border-transparent text-neutral-600 active:translate-y-0 hover:brightness-100 hover:bg-neutral-100'
       },

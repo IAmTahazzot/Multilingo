@@ -1,13 +1,52 @@
+'use client'
+
+import { checkUserEnrollment, getCourses } from '@/actions/course'
+import { Loading } from '@/components/Loading/Loading'
 import { BaseNavigation } from '@/components/Navigation/BaseNavigation'
 import { UserNavigation } from '@/components/Navigation/UserNavigation'
+import { ModalType, useModal } from '@/hooks/useModal'
+import { ModalProvider } from '@/providers/ModalProvider'
+import { useUser } from '@clerk/nextjs'
+import { useEffect, useState } from 'react'
 
-export default async function MainLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const [mount, setMount] = useState(false)
+  const { user, isLoaded, isSignedIn } = useUser()
+  const { openModal } = useModal()
+
+  // Checking if user have enrolled in any course:
+  // If not, open the course setup modal
+  useEffect(() => {
+    if (!isSignedIn) {
+      return
+    }
+
+    const doesUserEnrolled = async () => {
+      const res = await checkUserEnrollment(user.id)
+      const courses = await getCourses()
+
+      if (res.length < 1) {
+        openModal(ModalType.COURSE_SETUP, { courses, user })
+      }
+
+      setMount(true)
+    }
+
+    doesUserEnrolled()
+  }, [isSignedIn, user, openModal])
+
+  if (!isLoaded || !mount) {
+    return <Loading />
+  }
+
   return (
-    <div className='pl-64'>
-      <BaseNavigation>
-        <UserNavigation />
-      </BaseNavigation>
-      <div className='m-6'>{children}</div>
-    </div>
+    <ModalProvider>
+      <div className='pl-64'>
+        <BaseNavigation>
+          <UserNavigation />
+        </BaseNavigation>
+        <div className='m-6'>{children}</div>
+      </div>
+    </ModalProvider>
   )
 }

@@ -1,12 +1,15 @@
 'use client'
 
 import { setupUser } from '@/actions/setup-user'
+import { Button } from '@/components/Button/Button'
 import { Loading } from '@/components/Loading/Loading'
+import { ModalType, useModal } from '@/hooks/useModal'
 import { useUser } from '@clerk/nextjs'
 import { useEffect } from 'react'
 
 export default function LearnPage() {
-  const { user, isLoaded, isSignedIn } = useUser()
+  const { isLoaded } = useUser()
+  const { openModal } = useModal()
 
   useEffect(() => {
     const getUser = async () => {
@@ -26,8 +29,15 @@ export default function LearnPage() {
   }
 
   return (
-    <h1>
-      {isSignedIn ? `Welcome, ${user.fullName}` : 'Loading...'}
-    </h1>
+    <div>
+      Course will be loaded here...
+      <Button
+        theme={'primary'}
+        onClick={() => {
+          openModal(ModalType.COURSE_SETUP)
+        }}>
+        Select a course
+      </Button>
+    </div>
   )
 }

@@ -17,9 +17,9 @@ export const BaseNavigation = ({
         'w-64', // default width
         className
       )}>
-      <div className='py-6'>
+      <div className='py-6 px-4'>
         <Link
-          href='/dashboard'
+          href='/'
           className='text-3xl font-display text-primary-default tracking-tight'>
           Multilingo
         </Link>

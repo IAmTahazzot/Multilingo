@@ -1,11 +1,11 @@
-'use server';
+'use server'
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db'
 import { languages } from '@/lib/countries'
 
 export const getCourses = async () => {
-  const courses = await db.course.findMany();
-  return courses;
+  const courses = await db.course.findMany()
+  return courses
 }
 
 export const SaveCourse = async (courseCode: keyof typeof languages) => {
@@ -32,7 +32,7 @@ export const SaveCourse = async (courseCode: keyof typeof languages) => {
 }
 
 export const deleteCourse = async (courseId: string) => {
-  console.log(courseId);
+  console.log(courseId)
   console.log('---------')
   const deletedCourse = await db.course.delete({
     where: {
@@ -41,4 +41,32 @@ export const deleteCourse = async (courseId: string) => {
   })
 
   return deletedCourse
+}
+
+export const checkUserEnrollment = async (userId: string) => {
+  const enrollment = await db.courseEnrollment.findMany({
+    where: {
+      userId
+    },
+    include: {
+      course: true
+    }
+  })
+
+  return enrollment
+}
+
+export const enrollUser = async (userId: string, courseId: string) => {
+  try {
+    const enrollment = await db.courseEnrollment.create({
+      data: {
+        userId,
+        courseId
+      }
+    })
+
+    return enrollment
+  } catch (error) {
+    throw new Error('An error occured while enrolling user.')
+  }
 }

@@ -22,7 +22,7 @@ const Variants = cva('rounded-xl p-6', {
 type CardProps = {
   children?: React.ReactNode
   className?: string
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 } & VariantProps<typeof Variants>
 
 export const Card = ({ children, theme, className, onClick }: CardProps) => {
