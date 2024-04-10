@@ -7,16 +7,11 @@ const Variants = cva(
   {
     variants: {
       theme: {
-        primary:
-          'bg-primary-default border-primary-deep text-white active:border-none',
-        secondary:
-          'bg-secondary-default border-secondary-deep text-white active:border-none',
-        tertiary:
-          'bg-tertiary-default border-tertiary-deep text-white active:border-none',
-        success:
-          'bg-success-default border-success-deep text-white active:border-none',
-        premium:
-          'bg-premium-default border-premium-deep text-white active:border-none',
+        primary: 'bg-primary-default border-primary-deep text-white active:border-none',
+        secondary: 'bg-secondary-default border-secondary-deep text-white active:border-none',
+        tertiary: 'bg-tertiary-default border-tertiary-deep text-white active:border-none',
+        success: 'bg-success-default border-success-deep text-white active:border-none',
+        premium: 'bg-premium-default border-premium-deep text-white active:border-none',
         white: 'bg-white text-primary-default border-slate-300',
         danger: 'bg-red-500 border-red-700 text-white active:border-none',
         outline:
@@ -66,14 +61,12 @@ export const Button = ({
   className,
   theme,
   size,
-  disabled,
+  disabled
 }: ButtonProps) => {
   if (type === 'link') {
     return (
       <Link
-        href={
-          href || '#-----------------void-link-is-forbidden-----------------#'
-        }
+        href={href || '#-----------------void-link-is-forbidden-----------------#'}
         className={cn(
           'flex items-center',
           Variants({ theme, size }),
@@ -86,9 +79,7 @@ export const Button = ({
           width: width && `${width}px`
         }}>
         {icon && <div className='w-8 h-8 mr-3 flex items-center'>{icon}</div>}
-        <span className={cn(text && 'h-5')}>
-          {text ? text : children ? children : 'Empty button is forbidden'}
-        </span>
+        <span className={cn(text && 'h-5')}>{text ? text : children ? children : 'Empty button is forbidden'}</span>
       </Link>
     )
   }
@@ -98,20 +89,13 @@ export const Button = ({
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className={cn(
-        'flex items-center',
-        Variants({ theme, size }),
-        icon ? 'text-left' : 'justify-center',
-        className
-      )}
+      className={cn('flex items-center', Variants({ theme, size }), icon ? 'text-left' : 'justify-center', className)}
       style={{
         height: height && `${height}px`,
         width: width && `${width}px`
       }}>
       <div>{icon}</div>
-      <span>
-        {text ? text : children ? children : 'Empty button is forbidden'}
-      </span>
+      <span>{text ? text : children ? children : 'Empty button is forbidden'}</span>
     </button>
   )
 }
