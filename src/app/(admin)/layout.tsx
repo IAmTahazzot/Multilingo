@@ -5,13 +5,10 @@ import { Button } from '@/components/Button/Button'
 import { Card } from '@/components/Card/Card'
 import { Loading } from '@/components/Loading/Loading'
 import { BaseNavigation } from '@/components/Navigation/BaseNavigation'
-import { useUser } from '@clerk/nextjs'
 import { User } from '@prisma/client'
-import { Languages, Plus } from 'lucide-react'
-import Link from 'next/link'
+import { BookCheck, Languages } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Toaster } from 'sonner'
 
 const Navigation = [
   {
@@ -20,9 +17,9 @@ const Navigation = [
     icon: Languages
   },
   {
-    name: 'Add Lessons',
+    name: 'Lessons',
     href: '/dashboard/create-course',
-    icon: Plus
+    icon: BookCheck
   }
 ]
 
@@ -53,8 +50,6 @@ export default function AdminLayout({
     } finally {
       setIsLoaded(true)
     }
-
-    console.log('fetching user data... ONCE ONLY')
   }, [])
 
   if (!isLoaded || !user) {
@@ -76,8 +71,8 @@ export default function AdminLayout({
   }
 
   return (
-    <div className='pl-64'>
-      <BaseNavigation className='w-64'>
+    <main className='pl-64 bg-white min-h-screen' vaul-drawer-wrapper={'true'}>
+      <BaseNavigation>
         <div className='flex flex-col space-y-2'>
           {Navigation.map((item, index) => (
             <Button
@@ -91,9 +86,7 @@ export default function AdminLayout({
           ))}
         </div>
       </BaseNavigation>
-
-      <main className='max-w-[1056px] mx-auto p-6'>{children}</main>
-      <Toaster position='bottom-right' />
-    </div>
+      <section className='p-6'>{children}</section>
+    </main>
   )
 }

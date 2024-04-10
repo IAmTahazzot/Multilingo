@@ -53,7 +53,7 @@ model LessonProgress {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String
   courseId           String
-  lessonId           String
+  lessonId           Int
   unitId             String
   sectionId          String
   unit               Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
@@ -102,9 +102,7 @@ model Unit {
 }
 
 model Lesson {
-  id             String           @id @default(cuid())
-  title          String
-  description    String
+  id             Int              @id @default(autoincrement())
   unit           Unit             @relation(fields: [unitId], references: [id], onDelete: Cascade)
   unitId         String
   createdAt      DateTime         @default(now())
@@ -114,14 +112,16 @@ model Lesson {
 }
 
 enum QuestionType {
+  MULTIPLE_CHOICE_IMAGE
   MULTIPLE_CHOICE
-  FILL_IN_THE_BLANK
+  //FILL_IN_THE_BLANK
+  REARRANGE
   TRUE_FALSE
 }
 
 model Question {
   id        String       @id @default(cuid())
-  lessonId  String
+  lessonId  Int
   title     String
   type      QuestionType
   createdAt DateTime     @default(now())
