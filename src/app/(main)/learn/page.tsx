@@ -30,14 +30,7 @@ export default function LearnPage() {
 
   return (
     <div>
-      Course will be loaded here...
-      <Button
-        theme={'primary'}
-        onClick={() => {
-          openModal(ModalType.COURSE_SETUP)
-        }}>
-        Select a course
-      </Button>
+
     </div>
   )
 }
