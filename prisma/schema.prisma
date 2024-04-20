@@ -53,9 +53,10 @@ model LessonProgress {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String
   courseId           String
-  lessonId           Int
-  unitId             String
   sectionId          String
+  unitId             String
+  lessonId           Int
+  questionCount      Int      @default(0)
   unit               Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
   section            Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   course             Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
