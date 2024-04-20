@@ -7,7 +7,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { LessonStateProps } from '@/lib/types'
-import { getUnits, getUnitsById } from '@/actions/unit'
+import { getUnits } from '@/actions/unit'
 
 export const SelectSection = ({ state, setState }: LessonStateProps) => {
   const onSectionSelect = async (value: string) => {

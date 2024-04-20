@@ -13,7 +13,7 @@ export const Loading = () => {
 
   return (
     <div className='h-screen flex items-center justify-center'>
-      {slowResponse ? ':( Sorry, the page took too long to load' : 'Loading..'}
+      {slowResponse ? 'Slow connection, please wait...' : 'Loading..'}
     </div>
   )
 }

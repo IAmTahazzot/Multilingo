@@ -59,7 +59,7 @@ export const CourseSetupModal = () => {
         </div>
         <div>
           <p className='text-muted-foreground text-sm mt-6'>
-            At this very moment this platform only supports French langauge, more languages will be added soon.
+            More courses will be available soon. Stay tuned! 
           </p>
         </div>
         <div className='my-6 flex justify-center'>

@@ -33,8 +33,8 @@ export const getQuestionById = async (questionId: string) => {
 
 export const updateQuestion = async (
   data: z.infer<typeof questionSchema> & {
-    type: 'MULTIPLE_CHOICE' | 'MULTIPLE_CHOICE_IMAGE' | 'TRUE_FALSE' | 'REARRANGE',
-    question: Question & { Option: Option[] }
+    type: 'MULTIPLE_CHOICE' | 'MULTIPLE_CHOICE_IMAGE' | 'TRUE_FALSE' | 'REARRANGE'
+    prevQuestion: Question & { Option: Option[] }
   }
 ) => {
   if (!data.type) {
@@ -44,39 +44,81 @@ export const updateQuestion = async (
   try {
     switch (data.type) {
       case 'MULTIPLE_CHOICE':
-        if (!data.option1 || !data.option2 || !data.option3 || !data.option4) {
+        if (!data.option1 || !data.option2 || !data.option3) {
           throw new Error('All options are required')
+        }
+
+        // Assuming that the options are in the same order as they were created
+        const options = [data.option1, data.option2, data.option3]
+        const answers = [data.answer === '1', data.answer === '2', data.answer === '3']
+
+        for (let i = 0; i < options.length; i++) {
+          await db.option.update({
+            where: {
+              id: data.prevQuestion.Option[i].id
+            },
+            data: {
+              title: options[i],
+              isCorrect: answers[i]
+            }
+          })
         }
 
         const updatedMultipleChoiceQuestion = await db.question.update({
           where: {
-            id: data.questionId
+            id: data.prevQuestion.id
           },
           data: {
             type: data.type,
             title: data.question,
-            lessonId: data.lessonId,
+            lessonId: data.prevQuestion.lessonId
+          },
+          include: {
+            Option: true
+          }
+        })
+
+        return updatedMultipleChoiceQuestion
+      case 'MULTIPLE_CHOICE_IMAGE':
+        if (
+          !data.option4 ||
+          !data.option5 ||
+          !data.option6 ||
+          !data.option1_image ||
+          !data.option2_image ||
+          !data.option3_image
+        ) {
+          throw new Error('Image and all options are required')
+        }
+
+        const updatedMultipleChoiceImageQuestion = await db.question.update({
+          where: {
+            id: data.prevQuestion.id
+          },
+          data: {
+            type: data.type,
+            title: data.question,
+            lessonId: data.prevQuestion.lessonId,
             Option: {
               updateMany: {
                 where: {
-                  questionId: data.questionId
+                  questionId: data.prevQuestion.id
                 },
                 data: [
                   {
-                    title: data.option1,
-                    isCorrect: data.answer === '1'
-                  },
-                  {
-                    title: data.option2,
-                    isCorrect: data.answer === '2'
-                  },
-                  {
-                    title: data.option3,
-                    isCorrect: data.answer === '3'
-                  },
-                  {
                     title: data.option4,
-                    isCorrect: data.answer === '4'
+                    isCorrect: data.answer === '4',
+                    imageUrl: data.option1_image
+                  },
+                  {
+                    title: data.option5,
+                    isCorrect: data.answer === '5',
+                    imageUrl: data.option2_image
+                  },
+                  {
+                    title: data.option6,
+                    isCorrect: data.answer === '6',
+                    imageUrl: data.option3_image
                   }
                 ]
               }
@@ -87,73 +129,15 @@ export const updateQuestion = async (
           }
         })
 
-        return updatedMultipleChoiceQuestion
-      case 'MULTIPLE_CHOICE_IMAGE':
-        if (
-          !data.option5 ||
-          !data.option6 ||
-          !data.option7 ||
-          !data.option8 ||
-          !data.option1_image ||
-          !data.option2_image ||
-          !data.option3_image ||
-          !data.option4_image
-        ) {
-          throw new Error('Image and all options are required')
-        }
-
-        const updatedMultipleChoiceImageQuestion = await db.question.update({
-          where: {
-            id: data.questionId
-          },
-          data: {
-            type: data.type,
-            title: data.question,
-            lessonId: data.lessonId,
-            Option: {
-              updateMany: {
-                where: {
-                  questionId: data.questionId
-                },
-                data: [
-                  {
-                    title: data.option5,
-                    isCorrect: data.answer === '5',
-                    imageUrl: data.option1_image
-                  },
-                  {
-                    title: data.option6,
-                    isCorrect: data.answer === '6',
-                    imageUrl: data.option2_image
-                  },
-                  {
-                    title: data.option7,
-                    isCorrect: data.answer === '7',
-                    imageUrl: data.option3_image
-                  },
-                  {
-                    title: data.option8,
-                    isCorrect: data.answer === '8',
-                    imageUrl: data.option4_image
-                  }
-                ]
-              }
-            }
-          },
-          include: {
-            Option: true,
-          }
-        })
-
         return updatedMultipleChoiceImageQuestion
 
       case 'REARRANGE':
         const updatedRearrangeQuestion = await db.question.update({
           where: {
-            id: data.question.id
+            id: data.prevQuestion.id
           },
           data: {
-            title: data.question,
+            title: data.question
           },
           include: {
             Option: true
@@ -168,14 +152,14 @@ export const updateQuestion = async (
 
         const updatedTrueFalseQuestion = await db.question.update({
           where: {
-            id: data.question.id
+            id: data.prevQuestion.id
           },
           data: {
-            title: data.question.title,
+            title: data.prevQuestion.title,
             Option: {
               update: {
                 where: {
-                  id: data.question.Option[0].id
+                  id: data.prevQuestion.Option[0].id
                 },
                 data: {
                   title: data.answer.toUpperCase(), // for true false question, we only need one option and the title is the answer
@@ -194,7 +178,8 @@ export const updateQuestion = async (
         throw new Error('Invalid question type')
     }
   } catch (error) {
-    console.log(error);
+    console.log('----------------------------------- NEW ')
+    console.log(error)
     throw new Error('Something is terribly wrong while updating!')
   }
 }
@@ -222,7 +207,7 @@ export const createQuestion = async (
   try {
     switch (data.type) {
       case 'MULTIPLE_CHOICE':
-        if (!data.option1 || !data.option2 || !data.option3 || !data.option4) {
+        if (!data.option1 || !data.option2 || !data.option3) {
           throw new Error('All options are required')
         }
 
@@ -245,10 +230,6 @@ export const createQuestion = async (
                   {
                     title: data.option3,
                     isCorrect: data.answer === '3'
-                  },
-                  {
-                    title: data.option4,
-                    isCorrect: data.answer === '4'
                   }
                 ]
               }
@@ -262,14 +243,12 @@ export const createQuestion = async (
         return multipleChoiceQuestion
       case 'MULTIPLE_CHOICE_IMAGE':
         if (
+          !data.option4 ||
           !data.option5 ||
           !data.option6 ||
-          !data.option7 ||
-          !data.option8 ||
           !data.option1_image ||
           !data.option2_image ||
-          !data.option3_image ||
-          !data.option4_image
+          !data.option3_image
         ) {
           throw new Error('Image and all options are required')
         }
@@ -283,6 +262,11 @@ export const createQuestion = async (
               createMany: {
                 data: [
                   {
+                    title: data.option4,
+                    isCorrect: data.answer === '4',
+                    imageUrl: data.option3_image
+                  },
+                  {
                     title: data.option5,
                     isCorrect: data.answer === '5',
                     imageUrl: data.option1_image
@@ -291,16 +275,6 @@ export const createQuestion = async (
                     title: data.option6,
                     isCorrect: data.answer === '6',
                     imageUrl: data.option2_image
-                  },
-                  {
-                    title: data.option7,
-                    isCorrect: data.answer === '7',
-                    imageUrl: data.option3_image
-                  },
-                  {
-                    title: data.option8,
-                    isCorrect: data.answer === '8',
-                    imageUrl: data.option4_image
                   }
                 ]
               }
@@ -352,6 +326,7 @@ export const createQuestion = async (
         throw new Error('Invalid question type')
     }
   } catch (error) {
+    console.log(error)
     throw new Error('Something is terribly wrong!')
   }
 }

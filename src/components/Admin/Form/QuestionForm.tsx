@@ -21,19 +21,16 @@ import { toast } from 'sonner'
 LR.registerBlocks(LR)
 
 export const questionSchema = z.object({
-  question: z.string().min(10, { message: 'Question is too short' }),
+  question: z.string().min(2, { message: 'Question is too short' }),
   option1: z.string().optional(),
   option2: z.string().optional(),
   option3: z.string().optional(),
   option4: z.string().optional(),
   option5: z.string().optional(),
   option6: z.string().optional(),
-  option7: z.string().optional(),
-  option8: z.string().optional(),
   option1_image: z.string().optional(),
   option2_image: z.string().optional(),
   option3_image: z.string().optional(),
-  option4_image: z.string().optional(),
   answer: z.string()
 })
 
@@ -48,68 +45,26 @@ export const QuestionForm = ({
   const optionImage1Ref = useRef<typeof LR.UploadCtxProvider.prototype & LR.UploadCtxProvider>(null)
   const optionImage2Ref = useRef<typeof LR.UploadCtxProvider.prototype & LR.UploadCtxProvider>(null)
   const optionImage3Ref = useRef<typeof LR.UploadCtxProvider.prototype & LR.UploadCtxProvider>(null)
-  const optionImage4Ref = useRef<typeof LR.UploadCtxProvider.prototype & LR.UploadCtxProvider>(null)
 
   const form = useForm({
     resolver: zodResolver(questionSchema),
     defaultValues: {
       question: question?.title || '',
       type: question?.type || QuestionType.MULTIPLE_CHOICE,
-      option1: '',
-      option2: '',
-      option3: '',
-      option4: '',
-      option5: '',
-      option6: '',
-      option7: '',
-      option8: '',
-      option1_image: '',
-      option2_image: '',
-      option3_image: '',
-      option4_image: '',
+      option1: question?.Option[0]?.title || '',
+      option2: question?.Option[1]?.title || '',
+      option3: question?.Option[2]?.title || '',
+      option4: question?.Option[0]?.title || '',
+      option5: question?.Option[1]?.title || '',
+      option6: question?.Option[2]?.title || '',
+      option1_image: question?.Option[0]?.imageUrl || '',
+      option2_image: question?.Option[1]?.imageUrl || '',
+      option3_image: question?.Option[2]?.imageUrl || '',
       answer: '-1'
     }
   })
 
-  // SET DEFAULT VALUES FOR EDIT QUESTION
-  if (question) {
-    console.log('------- update question log -------')
-    console.log(form)
-
-    form.setValue('question', question.title)
-    form.setValue('type', question.type)
-
-    if (question.type === QuestionType.MULTIPLE_CHOICE && question.Option.length === 4) {
-      form.setValue('option1', question.Option[0].title || 'fuck me')
-      form.setValue('option2', question.Option[1].title || '')
-      form.setValue('option3', question.Option[2].title || '')
-      form.setValue('option4', question.Option[3].title || '')
-
-      const correctOption = question.Option.findIndex(op => op.isCorrect)
-      form.setValue('answer', (correctOption + 1).toString() || '-1')
-    }
-
-    if (question.type === QuestionType.MULTIPLE_CHOICE_IMAGE) {
-      form.setValue('option5', question.Option[0]?.title || '')
-      form.setValue('option6', question.Option[1]?.title || '')
-      form.setValue('option7', question.Option[2]?.title || '')
-      form.setValue('option8', question.Option[3]?.title || '')
-      form.setValue('option1_image', question.Option[0]?.imageUrl || '')
-      form.setValue('option2_image', question.Option[1]?.imageUrl || '')
-      form.setValue('option3_image', question.Option[2]?.imageUrl || '')
-      form.setValue('option4_image', question.Option[3]?.imageUrl || '')
-    }
-
-    if (question.type === QuestionType.TRUE_FALSE) {
-      console.log('IT IS TRUE FALSE')
-      form.setValue('answer', question.Option[0].title.toLowerCase() || 'false')
-    }
-  }
-
   useEffect(() => {
-    console.log(`
-      This motherfucker is the question type: ${type}
-    `)
     form.reset()
   }, [type])
 
@@ -140,37 +95,28 @@ export const QuestionForm = ({
     optionImage3Ref.current.addEventListener('file-upload-success', handleUpload)
   }, [])
 
-  useEffect(() => {
-    if (!optionImage4Ref.current) return
-    const handleUpload = async (e: any) => {
-      const imageUrl = e.detail.fileInfo.cdnUrl + e.detail.fileInfo.name
-      form.setValue('option4_image', imageUrl)
-    }
-    optionImage4Ref.current.addEventListener('file-upload-success', handleUpload)
-  }, [])
-
   const saveQuestion = async (data: z.infer<typeof questionSchema>) => {
+    console.log(data)
+
     if (!state.lesson.selectedLessonId) {
       return toast.warning('Please select a lesson to add a question')
     }
 
     switch (type) {
       case 'MULTIPLE_CHOICE':
-        if (!data.option1 || !data.option2 || !data.option3 || !data.option4 || !/^[1-4]$/.test(data.answer)) {
+        if (!data.option1 || !data.option2 || !data.option3 || !/^[1-3]$/.test(data.answer)) {
           return toast.warning('All options are required for multiple choice question')
         }
         break
       case 'MULTIPLE_CHOICE_IMAGE':
         if (
+          !data.option4 ||
           !data.option5 ||
           !data.option6 ||
-          !data.option7 ||
-          !data.option8 ||
           !data.option1_image ||
           !data.option2_image ||
           !data.option3_image ||
-          !data.option4_image ||
-          !/^[5-8]$/.test(data.answer)
+          !/^[4-6]$/.test(data.answer)
         ) {
           return toast.warning('Image and all options are required for multiple choice image question')
         }
@@ -192,13 +138,27 @@ export const QuestionForm = ({
         res = await updateQuestion({
           ...data,
           type,
-          question
+          prevQuestion: question
+        })
+
+        setState(prev => {
+          return {
+            ...prev,
+            question: prev.question.map(q => (q.id === res.id ? res : q))
+          }
         })
       } else {
         res = await createQuestion({
           ...data,
           type,
           lessonId: state.lesson.selectedLessonId
+        })
+
+        setState(prev => {
+          return {
+            ...prev,
+            question: [...prev.question, res]
+          }
         })
       }
 
@@ -207,14 +167,6 @@ export const QuestionForm = ({
       }
 
       toast.success('Question saved successfully')
-
-      // remote the prev question and add the new question
-      setState(prev => {
-        return {
-          ...prev,
-          question: prev.question.map(q => (q.id === res.id ? res : q))
-        }
-      })
 
       if (!question) {
         form.reset()
@@ -269,7 +221,7 @@ export const QuestionForm = ({
           </div>
 
           {/* -------------------------------- [BEGIN] Dynamic Form Fields -------------------------------- */}
-          <div className={cn('hidden grid-cols-4 gap-6', type === QuestionType.MULTIPLE_CHOICE && 'grid')}>
+          <div className={cn('hidden grid-cols-3 gap-6', type === QuestionType.MULTIPLE_CHOICE && 'grid')}>
             <Card theme='default' className='p-6 text-center'>
               <FormItem>
                 <FormLabel htmlFor='q_option_1'>Option 1</FormLabel>
@@ -291,19 +243,12 @@ export const QuestionForm = ({
                 <Input type='radio' value='3' {...form.register('answer')} />
               </FormItem>
             </Card>
-            <Card theme='default' className='p-6 text-center'>
-              <FormItem>
-                <FormLabel htmlFor='q_option_4'>Option 4</FormLabel>
-                <Input type='text' {...form.register('option4')} id='q_option_4' />
-                <Input type='radio' value='4' {...form.register('answer')} />
-              </FormItem>
-            </Card>
           </div>
 
-          <div className={cn('hidden grid-cols-4 gap-6', type === QuestionType.MULTIPLE_CHOICE_IMAGE && 'grid')}>
+          <div className={cn('hidden grid-cols-3 gap-6', type === QuestionType.MULTIPLE_CHOICE_IMAGE && 'grid')}>
             <Card theme='default' className='p-6 text-center'>
               <FormItem className='space-y-2'>
-                <FormLabel htmlFor='q_option_5'>Option</FormLabel>
+                <FormLabel htmlFor='q_option_4'>Option</FormLabel>
                 <div className='space-y-2'>
                   {form.watch('option1_image') && (
                     <div className='relative rounded-lg overflow-hidden aspect-square'>
@@ -328,13 +273,13 @@ export const QuestionForm = ({
                     <lr-upload-ctx-provider ctx-name='optionImage1' ref={optionImage1Ref} />
                   </div>
                 </div>
-                <Input type='text' {...form.register('option5')} id='q_option_5' />
-                <Input type='radio' value='5' {...form.register('answer')} />
+                <Input type='text' {...form.register('option4')} id='q_option_4' />
+                <Input type='radio' value='4' {...form.register('answer')} />
               </FormItem>
             </Card>
             <Card theme='default' className='p-6 text-center'>
               <FormItem className='space-y-2'>
-                <FormLabel htmlFor='q_option_6'>Option</FormLabel>
+                <FormLabel htmlFor='q_option_5'>Option</FormLabel>
                 <div className='space-y-2'>
                   {form.watch('option2_image') && (
                     <div className='relative rounded-lg overflow-hidden aspect-square'>
@@ -359,13 +304,14 @@ export const QuestionForm = ({
                     <lr-upload-ctx-provider ctx-name='optionImage2' ref={optionImage2Ref} />
                   </div>
                 </div>
-                <Input type='text' {...form.register('option6')} id='q_option_6' />
-                <Input type='radio' value='6' {...form.register('answer')} />
+                <Input type='text' {...form.register('option5')} id='q_option_5' />
+                <Input type='radio' value='5' {...form.register('answer')} />
               </FormItem>
             </Card>
+
             <Card theme='default' className='p-6 text-center'>
               <FormItem className='space-y-2'>
-                <FormLabel htmlFor='q_option_7'>Option</FormLabel>
+                <FormLabel htmlFor='q_option_6'>Option</FormLabel>
                 <div className='space-y-2'>
                   {form.watch('option3_image') && (
                     <div className='relative rounded-lg overflow-hidden aspect-square'>
@@ -376,7 +322,6 @@ export const QuestionForm = ({
                       />
                     </div>
                   )}
-
                   <div>
                     <lr-config
                       ctx-name='optionImage3'
@@ -391,41 +336,8 @@ export const QuestionForm = ({
                     <lr-upload-ctx-provider ctx-name='optionImage3' ref={optionImage3Ref} />
                   </div>
                 </div>
-                <Input type='text' {...form.register('option7')} id='q_option_7' />
-                <Input type='radio' value='7' {...form.register('answer')} />
-              </FormItem>
-            </Card>
-            <Card theme='default' className='p-6 text-center'>
-              <FormItem className='space-y-2'>
-                <FormLabel htmlFor='q_option_8'>Option</FormLabel>
-
-                <div className='space-y-2'>
-                  {form.watch('option4_image') && (
-                    <div className='relative rounded-lg overflow-hidden aspect-square'>
-                      <img
-                        src={form.getValues('option4_image')}
-                        className='object-cover h-full w-full'
-                        alt='option 4 image'
-                      />
-                    </div>
-                  )}
-
-                  <div>
-                    <lr-config
-                      ctx-name='optionImage4'
-                      pubkey='50d83aa24c3b01e5023e'
-                      image-only='true'
-                      multiple='false'
-                    />
-                    <lr-file-uploader-regular
-                      ctx-name='optionImage4'
-                      css-src={`https://cdn.jsdelivr.net/npm/@uploadcare/blocks@0.35.2/web/lr-file-uploader-regular.min.css`}
-                    />
-                    <lr-upload-ctx-provider ctx-name='optionImage4' ref={optionImage4Ref} />
-                  </div>
-                </div>
-                <Input type='text' {...form.register('option8')} id='q_option_8' />
-                <Input type='radio' value='8' {...form.register('answer')} />
+                <Input type='text' {...form.register('option6')} id='q_option_6' />
+                <Input type='radio' value='6' {...form.register('answer')} />
               </FormItem>
             </Card>
 

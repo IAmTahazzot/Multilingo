@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -19,10 +21,39 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { deleteQuestion } from '@/actions/question'
 
 type questionProps = {} & LessonStateProps
 
 export const QuestionTable = ({ state, setState }: questionProps) => {
+
+  const delQuestion = async (id: string) => {
+    try {
+
+      const res = await deleteQuestion(id)
+
+      if (!res) {
+        toast.error('Error', {
+          description: 'Could not delete question'
+        })
+        return
+      }
+
+      setState(prev => {
+        return {
+          ...prev,
+          question: prev.question.filter(question => question.id !== res.id)
+        }
+      })
+
+      toast.success('Success', {
+        description: 'Question deleted successfully'
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div>
       <Dialog>
@@ -74,7 +105,10 @@ export const QuestionTable = ({ state, setState }: questionProps) => {
                           description: 'Are you sure you want to delete this question?',
                           action: {
                             label: 'Yes',
-                            onClick: () => {}
+                            onClick: () => {
+                              console.log('deleting...')
+                              delQuestion(q.id)
+                            }
                           }
                         })
                       }}
