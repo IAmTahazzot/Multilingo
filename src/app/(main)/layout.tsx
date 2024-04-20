@@ -21,7 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       return
     }
 
-    const doesUserEnrolled = async () => {
+    const didUserEnrolled = async () => {
       const res = await checkUserEnrollment(user.id)
       const courses = await getCourses()
 
@@ -32,7 +32,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       setMount(true)
     }
 
-    doesUserEnrolled()
+    didUserEnrolled()
   }, [isSignedIn, user, openModal])
 
   if (!isLoaded || !mount) {

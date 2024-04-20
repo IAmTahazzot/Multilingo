@@ -1,0 +1,328 @@
+{
+  "user": {
+    "id": "user_2eg1SJu4cgjAPxACTt6VM2OR4oM",
+    "email": "iamtahazzot@gmail.com",
+    "username": "user-a66a9efd-5c4f-45e4-956e-d721d438f56c",
+    "name": "Tahazzot",
+    "password": null,
+    "imageUrl": null,
+    "xp": 0,
+    "hearts": 5,
+    "streak": 0,
+    "dimond": 100,
+    "role": "ADMIN",
+    "tier": "FREE",
+    "tierExpiration": null,
+    "createdAt": "2024-04-20T03:55:40.844Z",
+    "updatedAt": "2024-04-20T03:57:13.144Z"
+  },
+  "course": {
+    "id": "clv7kjiba0000z0o8sx36vrmj",
+    "name": "Spanish",
+    "language": "es",
+    "createdAt": "2024-04-20T03:57:44.182Z",
+    "updatedAt": "2024-04-20T03:57:44.182Z",
+    "Section": [
+      {
+        "id": "clv7m474q0002z0o81pqhvirt",
+        "title": "Start with essential phrases and simple grammar concepts",
+        "description": "1st section just introduction to the language ",
+        "courseId": "clv7kjiba0000z0o8sx36vrmj",
+        "createdAt": "2024-04-20T04:41:49.024Z",
+        "updatedAt": "2024-04-20T04:41:49.024Z",
+        "Unit": [
+          {
+            "id": "clv7m4ylh0004z0o8vc7hbff0",
+            "title": "Form basic sentences, greet people",
+            "description": "",
+            "sectionId": "clv7m474q0002z0o81pqhvirt",
+            "createdAt": "2024-04-20T04:42:24.677Z",
+            "updatedAt": "2024-04-20T04:42:24.677Z",
+            "Lesson": [
+              {
+                "id": 1,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T04:42:28.797Z",
+                "updatedAt": "2024-04-20T04:42:28.797Z",
+                "Question": [
+                  {
+                    "id": "clv7n2rkq0006z0o8vx03pz8z",
+                    "lessonId": 1,
+                    "title": "Women",
+                    "type": "MULTIPLE_CHOICE",
+                    "createdAt": "2024-04-20T05:08:41.882Z",
+                    "updatedAt": "2024-04-20T05:08:41.882Z",
+                    "Option": [
+                      {
+                        "id": "clv7n2rkr0007z0o81pk311jv",
+                        "title": "niño",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7n2rkq0006z0o8vx03pz8z",
+                        "createdAt": "2024-04-20T05:08:41.882Z",
+                        "updatedAt": "2024-04-20T05:08:41.882Z"
+                      },
+                      {
+                        "id": "clv7n2rkr0008z0o81j8nitvw",
+                        "title": "nina",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7n2rkq0006z0o8vx03pz8z",
+                        "createdAt": "2024-04-20T05:08:41.882Z",
+                        "updatedAt": "2024-04-20T05:08:41.882Z"
+                      },
+                      {
+                        "id": "clv7n2rkr0009z0o8qpkgmbmb",
+                        "title": "mujer",
+                        "imageUrl": null,
+                        "isCorrect": true,
+                        "questionId": "clv7n2rkq0006z0o8vx03pz8z",
+                        "createdAt": "2024-04-20T05:08:41.882Z",
+                        "updatedAt": "2024-04-20T05:08:41.882Z"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "clv7n86nn000bz0o8onhjo6oc",
+                    "lessonId": 1,
+                    "title": "Juan come manazanas",
+                    "type": "REARRANGE",
+                    "createdAt": "2024-04-20T05:12:54.707Z",
+                    "updatedAt": "2024-04-20T06:29:34.203Z",
+                    "Option": []
+                  },
+                  {
+                    "id": "clv7tlsv0000rz0o85lsrnj22",
+                    "lessonId": 1,
+                    "title": "Man",
+                    "type": "MULTIPLE_CHOICE_IMAGE",
+                    "createdAt": "2024-04-20T08:11:27.708Z",
+                    "updatedAt": "2024-04-20T08:11:27.708Z",
+                    "Option": [
+                      {
+                        "id": "clv7tlsv0000sz0o8tuy9kbr1",
+                        "title": "Hombre",
+                        "imageUrl": "https://ucarecdn.com/3dd3727f-1253-4311-a4c1-f9cd7dfb93e4/cat.svg",
+                        "isCorrect": true,
+                        "questionId": "clv7tlsv0000rz0o85lsrnj22",
+                        "createdAt": "2024-04-20T08:11:27.708Z",
+                        "updatedAt": "2024-04-20T08:11:27.708Z"
+                      },
+                      {
+                        "id": "clv7tlsv0000tz0o8in33352b",
+                        "title": "Nino",
+                        "imageUrl": "https://ucarecdn.com/d4c6c990-15af-422a-8e6c-63d6d9324307/hombre.svg",
+                        "isCorrect": false,
+                        "questionId": "clv7tlsv0000rz0o85lsrnj22",
+                        "createdAt": "2024-04-20T08:11:27.708Z",
+                        "updatedAt": "2024-04-20T08:11:27.708Z"
+                      },
+                      {
+                        "id": "clv7tlsv0000uz0o8w08v32ph",
+                        "title": "Gata",
+                        "imageUrl": "https://ucarecdn.com/f98ca235-2395-40fd-8fc2-7682cc627b9e/nino.svg",
+                        "isCorrect": false,
+                        "questionId": "clv7tlsv0000rz0o85lsrnj22",
+                        "createdAt": "2024-04-20T08:11:27.708Z",
+                        "updatedAt": "2024-04-20T08:11:27.708Z"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "clv7tmwhs000wz0o898xac2vi",
+                    "lessonId": 1,
+                    "title": "One",
+                    "type": "MULTIPLE_CHOICE",
+                    "createdAt": "2024-04-20T08:12:19.072Z",
+                    "updatedAt": "2024-04-20T08:12:19.072Z",
+                    "Option": [
+                      {
+                        "id": "clv7tmwhs000xz0o89m187xa2",
+                        "title": "Nina",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7tmwhs000wz0o898xac2vi",
+                        "createdAt": "2024-04-20T08:12:19.072Z",
+                        "updatedAt": "2024-04-20T08:12:19.072Z"
+                      },
+                      {
+                        "id": "clv7tmwhs000yz0o8449lr3z5",
+                        "title": "Un",
+                        "imageUrl": null,
+                        "isCorrect": true,
+                        "questionId": "clv7tmwhs000wz0o898xac2vi",
+                        "createdAt": "2024-04-20T08:12:19.072Z",
+                        "updatedAt": "2024-04-20T08:12:19.072Z"
+                      },
+                      {
+                        "id": "clv7tmwhs000zz0o8yo72mn7g",
+                        "title": "Bebo",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7tmwhs000wz0o898xac2vi",
+                        "createdAt": "2024-04-20T08:12:19.072Z",
+                        "updatedAt": "2024-04-20T08:12:19.072Z"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "clv7tncx40011z0o8srhwflol",
+                    "lessonId": 1,
+                    "title": "Pan",
+                    "type": "MULTIPLE_CHOICE",
+                    "createdAt": "2024-04-20T08:12:40.360Z",
+                    "updatedAt": "2024-04-20T08:12:40.360Z",
+                    "Option": [
+                      {
+                        "id": "clv7tncx40012z0o8sdvg6ero",
+                        "title": "One",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7tncx40011z0o8srhwflol",
+                        "createdAt": "2024-04-20T08:12:40.360Z",
+                        "updatedAt": "2024-04-20T08:12:40.360Z"
+                      },
+                      {
+                        "id": "clv7tncx40013z0o87hqq1iaz",
+                        "title": "City",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7tncx40011z0o8srhwflol",
+                        "createdAt": "2024-04-20T08:12:40.360Z",
+                        "updatedAt": "2024-04-20T08:12:40.360Z"
+                      },
+                      {
+                        "id": "clv7tncx40014z0o8lzkokqcm",
+                        "title": "Bread",
+                        "imageUrl": null,
+                        "isCorrect": true,
+                        "questionId": "clv7tncx40011z0o8srhwflol",
+                        "createdAt": "2024-04-20T08:12:40.360Z",
+                        "updatedAt": "2024-04-20T08:12:40.360Z"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "clv7xd2p00016z0o8659wjo6g",
+                    "lessonId": 1,
+                    "title": "Agua",
+                    "type": "MULTIPLE_CHOICE",
+                    "createdAt": "2024-04-20T09:56:39.012Z",
+                    "updatedAt": "2024-04-20T09:56:39.012Z",
+                    "Option": [
+                      {
+                        "id": "clv7xd2p00017z0o8796ng9ac",
+                        "title": "Lake",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7xd2p00016z0o8659wjo6g",
+                        "createdAt": "2024-04-20T09:56:39.012Z",
+                        "updatedAt": "2024-04-20T09:56:39.012Z"
+                      },
+                      {
+                        "id": "clv7xd2p00018z0o8tw9szi2q",
+                        "title": "Leaf",
+                        "imageUrl": null,
+                        "isCorrect": false,
+                        "questionId": "clv7xd2p00016z0o8659wjo6g",
+                        "createdAt": "2024-04-20T09:56:39.012Z",
+                        "updatedAt": "2024-04-20T09:56:39.012Z"
+                      },
+                      {
+                        "id": "clv7xd2p00019z0o823g8ppdk",
+                        "title": "Water",
+                        "imageUrl": null,
+                        "isCorrect": true,
+                        "questionId": "clv7xd2p00016z0o8659wjo6g",
+                        "createdAt": "2024-04-20T09:56:39.012Z",
+                        "updatedAt": "2024-04-20T09:56:39.012Z"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T05:14:31.036Z",
+                "updatedAt": "2024-04-20T05:14:31.036Z",
+                "Question": []
+              },
+              {
+                "id": 3,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:25.191Z",
+                "updatedAt": "2024-04-20T07:01:25.191Z",
+                "Question": []
+              },
+              {
+                "id": 4,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:25.844Z",
+                "updatedAt": "2024-04-20T07:01:25.844Z",
+                "Question": []
+              },
+              {
+                "id": 5,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:30.764Z",
+                "updatedAt": "2024-04-20T07:01:30.764Z",
+                "Question": []
+              },
+              {
+                "id": 6,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:31.827Z",
+                "updatedAt": "2024-04-20T07:01:31.827Z",
+                "Question": []
+              },
+              {
+                "id": 7,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:32.070Z",
+                "updatedAt": "2024-04-20T07:01:32.070Z",
+                "Question": []
+              },
+              {
+                "id": 8,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:32.471Z",
+                "updatedAt": "2024-04-20T07:01:32.471Z",
+                "Question": []
+              },
+              {
+                "id": 9,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:33.086Z",
+                "updatedAt": "2024-04-20T07:01:33.086Z",
+                "Question": []
+              },
+              {
+                "id": 10,
+                "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+                "createdAt": "2024-04-20T07:01:35.851Z",
+                "updatedAt": "2024-04-20T07:01:35.851Z",
+                "Question": []
+              }
+            ]
+          },
+          {
+            "id": "clv7r5cb9000pz0o86fv41qai",
+            "title": "Get around in a city, order food and drink",
+            "description": "",
+            "sectionId": "clv7m474q0002z0o81pqhvirt",
+            "createdAt": "2024-04-20T07:02:40.534Z",
+            "updatedAt": "2024-04-20T07:02:40.534Z",
+            "Lesson": []
+          }
+        ]
+      }
+    ]
+  },
+  "enrollmentDetails": {
+    "sectionId": "clv7m474q0002z0o81pqhvirt",
+    "unitId": "clv7m4ylh0004z0o8vc7hbff0",
+    "lessonId": 1,
+    "questionCount": 0
+  }
+}
