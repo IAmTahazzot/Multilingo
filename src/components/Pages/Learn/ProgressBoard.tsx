@@ -20,14 +20,13 @@ export const ProgressBoard = () => {
   const unitRefs = useRef<HTMLDivElement[]>([])
   const defaultUnitLessonProgressDirection: 'x' | "x'" = "x'"
 
+  // TODO: use useCallback to memoize the observer to optimize performance
   const observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.id
           const index = parseInt(id.replace('u', ''))
-
-          if (activeUnit.id == index) return
 
           setActiveUnit({
             title: entry.target.getAttribute('title') || 'Unknown unit',
@@ -38,7 +37,8 @@ export const ProgressBoard = () => {
       })
     },
     {
-      threshold: 0.5
+      rootMargin: '0px 0px -200px 0px',
+      threshold: 0,
     }
   )
 
@@ -61,7 +61,7 @@ export const ProgressBoard = () => {
 
   return (
     <section>
-      <div className='bg-transparent p-4 z-10'></div>
+      <div className="p-2"></div>
       <div className='sticky top-0 z-10'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
@@ -75,7 +75,6 @@ export const ProgressBoard = () => {
 
         return (
           <div key={unit.id} title={unit.title} id={'u' + ++index} ref={el => setRef(el, index)}>
-            <h1>{unit.title}</h1>
             <UnitChunk unit={unit} defaultUnitLessonProgressDirection={defaultUnitLessonProgressDirection} />
             <div className='h-screen'></div>
           </div>

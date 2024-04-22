@@ -51,7 +51,7 @@ export default function LearnPage() {
   }
 
   return (
-    <div className='grid grid-cols-[1fr_360px]'>
+    <div className='grid grid-cols-[1fr_370px] gap-10'>
       <ProgressBoard />
       <UserActivity />
     </div>
