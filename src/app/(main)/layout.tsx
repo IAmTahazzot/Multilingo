@@ -45,7 +45,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <BaseNavigation>
           <UserNavigation />
         </BaseNavigation>
-        <div className='m-6'>{children}</div>
+        <div className='mx-6'>{children}</div>
       </div>
     </ModalProvider>
   )
