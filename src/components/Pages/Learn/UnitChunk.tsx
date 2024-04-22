@@ -1,6 +1,7 @@
 'use client'
 
 import { LessonButton } from '@/components/Button/LessonButton'
+import { useGlobalState } from '@/hooks/useGlobalState'
 import { Lesson, Unit } from '@prisma/client'
 
 type LessonCardPosition = {
@@ -14,6 +15,15 @@ type UnitChunkProps = {
 }
 
 export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection }: UnitChunkProps) => {
+
+  const { user, course, enrollmentDetails } = useGlobalState()
+
+  if (!user || !course || !enrollmentDetails) {
+    return null
+  }
+
+  console.log(user, course, enrollmentDetails)
+
   const LessonCardPosition: LessonCardPosition = {
     direction: defaultUnitLessonProgressDirection,
     position: 0
