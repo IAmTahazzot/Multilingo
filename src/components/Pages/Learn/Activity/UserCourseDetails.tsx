@@ -37,9 +37,9 @@ export const UserCourseDetails = () => {
               <TooltipTrigger>
                 <div>
                   <svg width='25px' height='30px' viewBox='0 0 25 30' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-                    <g id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
-                      <g id='streak' transform='translate(1.000000, 1.000000)' fill-rule='nonzero'>
-                        <g id='Group' fill='#FF9600' stroke='#FFFFFF' stroke-width='2'>
+                    <g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+                      <g id='streak' transform='translate(1.000000, 1.000000)' fillRule='nonzero'>
+                        <g id='Group' fill='#FF9600' stroke='#FFFFFF' strokeWidth='2'>
                           <path
                             d='M0.068,15.675 L0.044,7.216 C0.039,5.334 1.25,3.942 3.056,4.246 C3.413,4.306 3.998,4.491 4.306,4.656 L5.997,5.561 L9.247,1.464 C9.79255754,0.776391272 10.6222536,0.37555895 11.5,0.37555895 C12.3777464,0.37555895 13.2074425,0.776391272 13.753,1.464 L20.523,10 C22.1231469,11.939276 22.9988566,14.3747884 23,16.889 C23,23.034 17.843,28 11.5,28 C5.157,28 0,23.034 0,16.889 C0,16.481 0.023,16.076 0.068,15.675 Z'
                             id='Path'
