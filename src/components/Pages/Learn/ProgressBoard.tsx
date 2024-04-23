@@ -17,7 +17,7 @@ export const ProgressBoard = () => {
   }>({
     title: '',
     id: -1,
-    theme: 'primary'
+    theme: 'secondary'
   })
   const sectionId = useMemo(() => {
     const currentSection = course?.Section.find(section => section.id === enrollmentDetails.sectionId)
@@ -65,7 +65,7 @@ export const ProgressBoard = () => {
   }
 
   const ObserverOption: IntersectionObserverInit = {
-    rootMargin: '-100% 0px 0px 0px',
+    rootMargin: '0px 0px -90% 0px',
     threshold: 0
   }
   const Observer = new IntersectionObserver(ObserverCallback, ObserverOption)
@@ -86,6 +86,15 @@ export const ProgressBoard = () => {
         Observer.unobserve(unit)
       })
     }
+  }, [course])
+
+  useEffect(() => {
+    setActiveUnit(prev => ({
+      ...prev,
+      title: course?.Section[0].Unit[0].title || '',
+      id: 1,
+      theme: CARD_THEMES[1]
+    }))
   }, [course])
 
   if (!course || !user) {
@@ -126,6 +135,8 @@ export const ProgressBoard = () => {
           </section>
         )
       })}
+
+      <div className='space h-32'></div>
     </section>
   )
 }

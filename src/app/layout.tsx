@@ -19,12 +19,7 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang='en'>
-        <body
-          className={cn(
-            displayFont.variable,
-            bodyFont.variable,
-            bodyFont.className
-          )}>
+        <body className={cn(displayFont.variable, bodyFont.variable, bodyFont.className)}>
           {children}
           <Toaster position='bottom-right' />
           <NetworkProvider />
