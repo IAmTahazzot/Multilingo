@@ -2,12 +2,14 @@
 
 import { Card } from '@/components/Card/Card'
 import { useGlobalState } from '@/hooks/useGlobalState'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { UnitChunk } from './UnitChunk'
 
 export const ProgressBoard = () => {
+  console.log('ProgressBoard is summoned!')
   const cardThemes = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger']
   const { course, user, enrollmentDetails } = useGlobalState()
+
   const [activeUnit, setActiveUnit] = useState<{
     title: string
     id: number
@@ -17,37 +19,60 @@ export const ProgressBoard = () => {
     id: -1,
     theme: 'primary'
   })
-  const unitRefs = useRef<HTMLDivElement[]>([])
   const defaultUnitLessonProgressDirection: 'x' | "x'" = "x'"
 
-  // TODO: use useCallback to memoize the observer to optimize performance
-  const observer = new IntersectionObserver(
+  const Observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const id = entry.target.id
-          const index = parseInt(id.replace('u', ''))
+          if (!course) {
+            return
+          }
 
-          setActiveUnit({
-            title: entry.target.getAttribute('title') || 'Unknown unit',
-            id: index,
-            theme: cardThemes[index] as 'primary' | 'secondary' | 'tertiary' | 'success' | 'premium' | 'danger'
-          })
+          const unitId = entry.target.id
+          const unitIndex = parseInt(entry.target.getAttribute('data-index') || '0')
+          const unit = course.Section.flatMap(section => section.Unit).find(unit => unit.id === unitId)
+
+          if (unit) {
+            setActiveUnit(prev => ({
+              ...prev,
+              title: unit.title,
+              id: unitIndex,
+              theme: (cardThemes[unitIndex] || 'primary') as
+                | 'primary'
+                | 'secondary'
+                | 'tertiary'
+                | 'success'
+                | 'premium'
+                | 'danger'
+            }))
+          }
         }
       })
     },
     {
-      rootMargin: '0px 0px -200px 0px',
-      threshold: 0,
+      rootMargin: '-100% 0px 0px 0px',
+      threshold: 0
     }
   )
 
-  const setRef = (el: HTMLDivElement | null, index: number) => {
-    if (el) {
-      unitRefs.current[index] = el
-      observer.observe(el)
+  useEffect(() => {
+    const units = document.querySelectorAll('section[class^="unit-"]')
+
+    if (units.length === 0) {
+      return
     }
-  }
+
+    units.forEach(unit => {
+      Observer.observe(unit)
+    })
+
+    return () => {
+      units.forEach(unit => {
+        Observer.unobserve(unit)
+      })
+    }
+  }, [course])
 
   if (!course || !user) {
     return <div>Loading...</div>
@@ -61,7 +86,7 @@ export const ProgressBoard = () => {
 
   return (
     <section>
-      <div className="p-2"></div>
+      <div className='p-2'></div>
       <div className='sticky top-0 z-10'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
@@ -74,10 +99,10 @@ export const ProgressBoard = () => {
         defaultUnitLessonProgressDirection === "x'" ? 'x' : "x'"
 
         return (
-          <div key={unit.id} title={unit.title} id={'u' + ++index} ref={el => setRef(el, index)}>
+          <section key={unit.id} title={unit.title} id={unit.id} className={'unit-' + unit.id} data-index={++index}>
             <UnitChunk unit={unit} defaultUnitLessonProgressDirection={defaultUnitLessonProgressDirection} />
             <div className='h-screen'></div>
-          </div>
+          </section>
         )
       })}
     </section>

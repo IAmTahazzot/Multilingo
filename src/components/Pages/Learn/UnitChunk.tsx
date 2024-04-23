@@ -22,8 +22,6 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection }: UnitChun
     return null
   }
 
-  console.log(user, course, enrollmentDetails)
-
   const LessonCardPosition: LessonCardPosition = {
     direction: defaultUnitLessonProgressDirection,
     position: 0
