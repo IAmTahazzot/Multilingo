@@ -12,10 +12,10 @@ type LessonCardPosition = {
 type UnitChunkProps = {
   unit: Unit & { Lesson: Lesson[] }
   defaultUnitLessonProgressDirection: 'x' | "x'"
+  index: number
 }
 
-export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection }: UnitChunkProps) => {
-
+export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index }: UnitChunkProps) => {
   const { user, course, enrollmentDetails } = useGlobalState()
 
   if (!user || !course || !enrollmentDetails) {
@@ -56,7 +56,15 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection }: UnitChun
 
   return (
     <div>
-      <div className='space-y-5 mt-6 flex flex-col items-center'>
+      <div className='space-y-6 mt-6 flex flex-col items-center'>
+        {index !== 0 && (
+          <div className='flex items-center justify-center gap-6 my-12 self-stretch'>
+            <div className='h-[1px] bg-neutral-300 flex-1'></div>
+            <span className='font-display text-neutral-400 text-xl'> {unit.title} </span>
+            <div className='h-[1px] bg-neutral-300 flex-1'></div>
+          </div>
+        )}
+
         {unit.Lesson.map(lesson => {
           const DOM = (
             <LessonButton

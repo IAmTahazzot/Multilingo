@@ -2,28 +2,44 @@
 
 import { Card } from '@/components/Card/Card'
 import { useGlobalState } from '@/hooks/useGlobalState'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { UnitChunk } from './UnitChunk'
 
-export const ProgressBoard = () => {
-  console.log('ProgressBoard is summoned!')
-  const cardThemes = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger']
-  const { course, user, enrollmentDetails } = useGlobalState()
+const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
+type Theme = (typeof CARD_THEMES)[number]
 
+export const ProgressBoard = () => {
+  const { course, user, enrollmentDetails } = useGlobalState()
   const [activeUnit, setActiveUnit] = useState<{
     title: string
     id: number
-    theme: 'primary' | 'secondary' | 'tertiary' | 'success' | 'premium' | 'danger'
+    theme: Theme
   }>({
     title: '',
     id: -1,
     theme: 'primary'
   })
-  const defaultUnitLessonProgressDirection: 'x' | "x'" = "x'"
+  const sectionId = useMemo(() => {
+    const currentSection = course?.Section.find(section => section.id === enrollmentDetails.sectionId)
 
-  const Observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
+    if (!currentSection) {
+      return null
+    }
+
+    let ID = course?.Section.findIndex(section => section.id === currentSection.id)
+
+    if (ID === undefined) {
+      return 0
+    }
+
+    return ID + 1
+  }, [course, enrollmentDetails.sectionId])
+
+  let defaultUnitLessonProgressDirection: 'x' | "x'" = 'x'
+
+  const ObserverCallback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach(entry => {
+      try {
         if (entry.isIntersecting) {
           if (!course) {
             return
@@ -38,23 +54,21 @@ export const ProgressBoard = () => {
               ...prev,
               title: unit.title,
               id: unitIndex,
-              theme: (cardThemes[unitIndex] || 'primary') as
-                | 'primary'
-                | 'secondary'
-                | 'tertiary'
-                | 'success'
-                | 'premium'
-                | 'danger'
+              theme: (CARD_THEMES[unitIndex] || 'primary') as Theme
             }))
           }
         }
-      })
-    },
-    {
-      rootMargin: '-100% 0px 0px 0px',
-      threshold: 0
-    }
-  )
+      } catch (error) {
+        console.error('Error in ProgressBoard ObserverCallback:', error)
+      }
+    })
+  }
+
+  const ObserverOption: IntersectionObserverInit = {
+    rootMargin: '-100% 0px 0px 0px',
+    threshold: 0
+  }
+  const Observer = new IntersectionObserver(ObserverCallback, ObserverOption)
 
   useEffect(() => {
     const units = document.querySelectorAll('section[class^="unit-"]')
@@ -90,18 +104,25 @@ export const ProgressBoard = () => {
       <div className='sticky top-0 z-10'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
-          <h2 className='font-display text-[rgba(255,255,255,.7)] uppercase'>Unit: {activeUnit.id}</h2>
+          <h2 className='font-display text-[rgba(255,255,255,.7)] uppercase'>
+            <span>{sectionId && `Section: ${sectionId}`}</span>
+            <span>, </span>
+            <span>Unit: {activeUnit.id}</span>
+          </h2>
           <h1 className='font-display text-[22px]'>{activeUnit.title}</h1>
         </Card>
       </div>
 
       {section.Unit.map((unit, index) => {
-        defaultUnitLessonProgressDirection === "x'" ? 'x' : "x'"
+        defaultUnitLessonProgressDirection = defaultUnitLessonProgressDirection === "x'" ? 'x' : "x'"
 
         return (
-          <section key={unit.id} title={unit.title} id={unit.id} className={'unit-' + unit.id} data-index={++index}>
-            <UnitChunk unit={unit} defaultUnitLessonProgressDirection={defaultUnitLessonProgressDirection} />
-            <div className='h-screen'></div>
+          <section key={unit.id} title={unit.title} id={unit.id} className={'unit-' + unit.id} data-index={index + 1}>
+            <UnitChunk
+              unit={unit}
+              defaultUnitLessonProgressDirection={defaultUnitLessonProgressDirection}
+              index={index}
+            />
           </section>
         )
       })}
