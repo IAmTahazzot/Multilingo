@@ -12,7 +12,7 @@ const Variants = cva(
         tertiary: 'bg-tertiary-default border-tertiary-deep text-white active:border-none',
         success: 'bg-success-default border-success-deep text-white active:border-none',
         premium: 'bg-premium-default border-premium-deep text-white active:border-none',
-        white: 'bg-white text-primary-default border-slate-300',
+        white: 'bg-white text-primary-default border-slate-300 active:border-none',
         danger: 'bg-red-500 border-red-700 text-white active:border-none',
         outline:
           'border-2 border-[#84d8ff] bg-sky-50 text-sky-500 hover:brightness-100 active:border-2 active:translate-y-0',
@@ -47,6 +47,7 @@ type ButtonProps = {
   width?: number
 
   className?: string
+  style?: React.CSSProperties
 } & VariantProps<typeof Variants>
 
 export const Button = ({
@@ -61,7 +62,8 @@ export const Button = ({
   className,
   theme,
   size,
-  disabled
+  disabled,
+  style
 }: ButtonProps) => {
   if (type === 'link') {
     return (
@@ -76,7 +78,8 @@ export const Button = ({
         )}
         style={{
           height: height && `${height}px`,
-          width: width && `${width}px`
+          width: width && `${width}px`,
+          ...style
         }}>
         {icon && <div className='w-8 h-8 mr-3 flex items-center'>{icon}</div>}
         <span className={cn(text && 'h-5')}>{text ? text : children ? children : 'Empty button is forbidden'}</span>
@@ -92,7 +95,8 @@ export const Button = ({
       className={cn('flex items-center', Variants({ theme, size }), icon ? 'text-left' : 'justify-center', className)}
       style={{
         height: height && `${height}px`,
-        width: width && `${width}px`
+        width: width && `${width}px`,
+        ...style
       }}>
       <div>{icon}</div>
       <span>{text ? text : children ? children : 'Empty button is forbidden'}</span>

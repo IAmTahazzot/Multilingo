@@ -12,7 +12,8 @@ const Variants = cva('rounded-xl p-6', {
       danger: 'bg-red-500 text-white',
       smallCard:
         'border-x-2 border-b-4 border-t-2 border-neutral-200 hover:bg-neutral-100 transition-colors duration-200',
-      default: 'border-2 border-neutral-200'
+      default: 'border-2 border-neutral-200 bg-white',
+      disabled: 'bg-neutral-100 text-neutral-400'
     }
   },
   defaultVariants: {

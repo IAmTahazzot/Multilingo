@@ -25,3 +25,12 @@ export const Primary: Story = {
     href: '/lessons'
   }
 }
+
+export const Active: Story = {
+  args: {
+    isActive: true,
+    variant: 'secondary',
+    icon: 'star',
+    href: '#'
+  }
+}

@@ -92,6 +92,10 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
         {unit.Lesson.map(lesson => {
           const isCompleted = enrollmentDetails.lessonId > lesson.id
           const isCurrent = enrollmentDetails.lessonId === lesson.id
+          const lessonQuestionsCount = course.Section.flatMap(section => section.Unit)
+            .flatMap(unit => unit.Lesson)
+            .find(lesson => lesson.id === lesson.id)?.Question.length
+          const lessonProgressPercentage = (enrollmentDetails.questionCount / (lessonQuestionsCount || 1)) * 100
           let variant: Theme | 'disabled' = 'disabled'
 
           if (lesson.id < enrollmentDetails.lessonId + 1) {
@@ -100,7 +104,7 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
 
           const DOM = (
             <LessonButton
-              href='/'
+              href='/lesson'
               icon={isCompleted ? 'check' : 'star'}
               key={lesson.id}
               style={{
@@ -111,6 +115,17 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
               variant={variant}
               id={'lesson-' + lesson.id}
               data-active-lesson={isCurrent}
+              isActive={isCurrent}
+              activeFillPercentage={lessonProgressPercentage}
+              lessonBeginDescription={
+                <div>
+                  <span>
+                    Unit: {unitIndex + 1}, Lesson: {lesson.id}
+                  </span>
+                  <br />
+                  <span>You&apos;ll get 20 XP</span>
+                </div>
+              }
             />
           )
 

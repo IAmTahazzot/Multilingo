@@ -1,8 +1,13 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Card } from '../Card/Card'
+import { useEffect, useState } from 'react'
+import { Button } from './Button'
 
 const Variants = cva(
-  'block h-[57px] w-[70px] rounded-[50%] flex items-center justify-center relative active:translate-y-[8px] active:shadow-none',
+  'block h-[57px] w-[70px] rounded-[50%] flex items-center justify-center relative active:translate-y-[8px] active:shadow-none outline-none focus:outline-none',
   {
     variants: {
       variant: {
@@ -23,7 +28,7 @@ const Variants = cva(
 )
 
 export const Icons = {
-  star(foreground: string, background: string, fill: string = 'white') {
+  star(foreground: string | null, background: string | null, fill: string = 'white') {
     return (
       <svg width='42' height='34' viewBox='0 0 42 34' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <g clipPath='url(#clip0_7030_116432)'>
@@ -41,7 +46,7 @@ export const Icons = {
     )
   },
 
-  chest(foreground: string, background: string, fill: string = 'white') {
+  chest(foreground: string | null, background: string | null, fill: string = 'white') {
     return (
       <svg width='80' height='90' viewBox='0 0 80 90' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <rect opacity='0.3' y='38' width='80' height='40' rx='4' fill='#AFAFAF' />
@@ -109,7 +114,7 @@ export const Icons = {
     )
   },
 
-  check(foreground: string, background: string, fill: string = 'white') {
+  check(foreground: string | null, background: string | null, fill: string = 'white') {
     return (
       <svg width='42' height='34' viewBox='0 0 42 34' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <g clipPath='url(#clip0_7030_116430)'>
@@ -148,6 +153,9 @@ type LessonButtonProps = {
   style?: React.CSSProperties
   disabled?: boolean
   id?: string
+  isActive?: boolean
+  activeFillPercentage?: number
+  lessonBeginDescription?: React.ReactNode
 } & VariantProps<typeof Variants>
 
 export const LessonButton: React.FC<LessonButtonProps> = ({
@@ -158,21 +166,118 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   style = {},
   disabled = false,
   id,
+  isActive,
+  activeFillPercentage = 0,
+  lessonBeginDescription = '',
   ...props
 }) => {
-  if (!href) {
-    return 'button without href'
+  const [showLessonBeginButton, setShowLessonBeginButton] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener('click', () => {
+      setShowLessonBeginButton(false)
+    })
+  }, [])
+
+  if (!Icons[icon]) {
+    throw new Error(`Icon ${icon} not found`)
   }
 
+  const startTooltip = (
+    <Card
+      theme='default'
+      className='absolute left-1/2 -translate-y-full -translate-x-1/2 z-10 py-2 anim-bounce repeat-infinite'>
+      <span
+        className='font-display text-[18px] uppercase'
+        style={{
+          color: 'var(--color-' + variant + ')'
+        }}>
+        Begin
+      </span>
+      <div
+        className='absolute top-full left-1/2 -translate-x-1/2 h-4 w-4 bg-white border-b-2 border-r-2 border-neutral-200'
+        style={{
+          rotate: '45deg'
+        }}></div>
+    </Card>
+  )
+
+  const progressCircle = (
+    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[270deg] h-[100px] w-[100px]'>
+      <svg
+        width='100'
+        height='100'
+        viewBox='0 0 100 100'
+        className='circular-progress absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+        <circle className='bg' cy='50' cx='50' r='46' strokeWidth='8px' stroke='#eee' fill='none'></circle>
+        <circle
+          className='fg'
+          cy='50'
+          cx='50'
+          r='46' // (size - strokeWidth) / 2
+          strokeWidth='8px'
+          stroke={'var(--color-' + variant + ')'}
+          fill='none'
+          style={{
+            strokeDasharray: `${activeFillPercentage * 2.88}, 288`,
+            strokeLinecap: 'round',
+            transition: 'stroke-dasharray 1s ease'
+          }}></circle>
+      </svg>
+    </div>
+  )
+
+  const lessonBeginButton = (
+    <div className='absolute left-1/2 top-[162%] -translate-x-1/2 z-10 w-[300px]' id='lessonBeginButton'>
+      <Card theme={variant} className='w-full anim-pop' onClick={e => e.stopPropagation()}>
+        <div className='space-y-4'>
+          <span className='font-display text-basetext-white'>{lessonBeginDescription}</span>
+          <Button
+            theme={'white'}
+            className='w-full'
+            style={{
+              color: variant === 'disabled' ? '#999' : 'var(--color-' + variant + ')'
+            }}>
+            Begin
+          </Button>
+        </div>
+
+        <div
+          className={cn('absolute top-0 left-1/2 -translate-x-1/2 h-4 w-4')}
+          style={{
+            rotate: '45deg',
+            backgroundColor: 'var(--color-' + variant + ')'
+          }}></div>
+      </Card>
+    </div>
+  )
+
   return (
-    <a
-      href={href || '#'}
-      className={cn(Variants({ variant }), className, disabled && 'pointer-events-not-allowed')}
-      style={style}
-      id={id}
-      {...props}>
-      <span className='text-white opacity-20 absolute'>{icon === 'check' && ActiveIconGlamorous}</span>
-      <span className='z-10'>{Icons[icon]('', '', disabled ? '#afafaf' : '#fff')}</span>
-    </a>
+    <div className={cn('relative', isActive && 'mt-12 mb-4')}>
+      {isActive && (
+        <>
+          {!showLessonBeginButton && startTooltip}
+          {progressCircle}
+        </>
+      )}
+      {showLessonBeginButton && lessonBeginButton}
+      <button
+        onClick={e => {
+          e.stopPropagation()
+
+          if (!isActive) {
+            return
+          }
+
+          setShowLessonBeginButton(prev => !prev)
+        }}
+        className={cn(Variants({ variant }), className, disabled && 'pointer-events-not-allowed')}
+        style={style}
+        id={id}
+        {...props}>
+        <span className='text-white opacity-20 absolute'>{icon === 'check' && ActiveIconGlamorous}</span>
+        <span className='z-[5]'>{Icons[icon](null, null, disabled ? '#afafaf' : '#fff')}</span>
+      </button>
+    </div>
   )
 }
