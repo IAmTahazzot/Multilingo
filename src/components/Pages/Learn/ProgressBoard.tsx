@@ -5,8 +5,8 @@ import { useGlobalState } from '@/hooks/useGlobalState'
 import { useState, useEffect, useMemo } from 'react'
 import { UnitChunk } from './UnitChunk'
 
-const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
-type Theme = (typeof CARD_THEMES)[number]
+export const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
+export type Theme = (typeof CARD_THEMES)[number]
 
 export const ProgressBoard = () => {
   const { course, user, enrollmentDetails } = useGlobalState()
@@ -17,7 +17,7 @@ export const ProgressBoard = () => {
   }>({
     title: '',
     id: -1,
-    theme: 'secondary'
+    theme: 'primary'
   })
   const sectionId = useMemo(() => {
     const currentSection = course?.Section.find(section => section.id === enrollmentDetails.sectionId)
@@ -54,7 +54,7 @@ export const ProgressBoard = () => {
               ...prev,
               title: unit.title,
               id: unitIndex,
-              theme: (CARD_THEMES[unitIndex] || 'primary') as Theme
+              theme: (CARD_THEMES[unitIndex - 1] || 'primary') as Theme
             }))
           }
         }
@@ -93,7 +93,7 @@ export const ProgressBoard = () => {
       ...prev,
       title: course?.Section[0].Unit[0].title || '',
       id: 1,
-      theme: CARD_THEMES[1]
+      theme: CARD_THEMES[0]
     }))
   }, [course])
 
@@ -110,7 +110,7 @@ export const ProgressBoard = () => {
   return (
     <section>
       <div className='p-2'></div>
-      <div className='sticky top-0 z-10'>
+      <div className='sticky top-0 z-20'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
           <h2 className='font-display text-[rgba(255,255,255,.7)] uppercase'>
@@ -131,6 +131,7 @@ export const ProgressBoard = () => {
               unit={unit}
               defaultUnitLessonProgressDirection={defaultUnitLessonProgressDirection}
               index={index}
+              activeUnit={activeUnit}
             />
           </section>
         )

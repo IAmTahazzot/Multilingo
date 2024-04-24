@@ -1,8 +1,9 @@
 # TODO
 
 🚧 - Learn (homepage)
-      - on the left side: get user progress data and show the section with all it's units and lessons
-      - on the right side: show super duolingo badge and leaderboard, xp and footer
+      ✅ - on the left side: get user progress data and show the section with all it's units and lessons
+      ✅ - on the right side: show super duolingo badge and leaderboard, xp and footer
+    - Lesson (Modal)
     - Leaderboard
     - Shop
     - Profile (update name and photo)

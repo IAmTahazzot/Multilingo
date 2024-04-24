@@ -3,6 +3,8 @@
 import { LessonButton } from '@/components/Button/LessonButton'
 import { useGlobalState } from '@/hooks/useGlobalState'
 import { Lesson, Unit } from '@prisma/client'
+import { CARD_THEMES, Theme } from './ProgressBoard'
+import { useEffect } from 'react'
 
 type LessonCardPosition = {
   direction: 'x' | "x'"
@@ -13,14 +15,36 @@ type UnitChunkProps = {
   unit: Unit & { Lesson: Lesson[] }
   defaultUnitLessonProgressDirection: 'x' | "x'"
   index: number
+  activeUnit: {
+    title: string
+    id: number
+    theme: Theme
+  }
 }
 
-export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index }: UnitChunkProps) => {
+export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, activeUnit }: UnitChunkProps) => {
   const { user, course, enrollmentDetails } = useGlobalState()
+
+  useEffect(() => {
+    const activeLessonDOM = document.querySelector('[data-active-lesson="true"]')
+
+    if (activeLessonDOM) {
+      // activeLessonDOM.scrollIntoView({
+      //   behavior: 'smooth',
+      //   block: 'center',
+      //   inline: 'center'
+      // })
+      const yOffSet = -180
+      const y = activeLessonDOM.getBoundingClientRect().top + window.scrollY + yOffSet
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }, [])
 
   if (!user || !course || !enrollmentDetails) {
     return null
   }
+
+  const unitIndex = course.Section.flatMap(section => section.Unit).findIndex(mapUnit => mapUnit.id === unit.id)
 
   const LessonCardPosition: LessonCardPosition = {
     direction: defaultUnitLessonProgressDirection,
@@ -66,17 +90,27 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index }: U
         )}
 
         {unit.Lesson.map(lesson => {
+          const isCompleted = enrollmentDetails.lessonId > lesson.id
+          const isCurrent = enrollmentDetails.lessonId === lesson.id
+          let variant: Theme | 'disabled' = 'disabled'
+
+          if (lesson.id < enrollmentDetails.lessonId + 1) {
+            variant = CARD_THEMES[unitIndex]
+          }
+
           const DOM = (
             <LessonButton
               href='/'
-              icon='star'
+              icon={isCompleted ? 'check' : 'star'}
               key={lesson.id}
               style={{
                 position: 'relative',
                 left: `${positionMap.get(LessonCardPosition.position)}px`
               }}
-              disabled={lesson.id !== 1}
-              variant={lesson.id === 1 ? 'primary' : 'disabled'}
+              disabled={variant === 'disabled'}
+              variant={variant}
+              id={'lesson-' + lesson.id}
+              data-active-lesson={isCurrent}
             />
           )
 
