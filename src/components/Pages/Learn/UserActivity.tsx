@@ -4,12 +4,22 @@ import { useGlobalState } from '@/hooks/useGlobalState'
 import { PremiumAdsCard } from './Activity/PremiumAdsCard'
 import { UserCourseDetails } from './Activity/UserCourseDetails'
 import { LeaderBoardCard } from './Activity/LeaderboardCard'
+import { useEffect, useState } from 'react'
+import { User } from '@prisma/client'
+import { Loading } from '@/components/Loading/Loading'
 
 export const UserActivity = () => {
-  const { user } = useGlobalState()
+  const [user, setUser] = useState<User>()
+  const { user: userData } = useGlobalState()
+
+  useEffect(() => {
+    if (!userData) return
+
+    setUser(userData)
+  }, [userData])
 
   if (!user) {
-    return null
+    return <p className='text-xs my-4 text-neutral-400'>If takes longer than expected, please refresh the page.</p>
   }
 
   return (

@@ -4,9 +4,11 @@ import { CourseState } from '@/hooks/useGlobalState'
 import { db } from '@/lib/db'
 import { currentUser } from '@clerk/nextjs'
 import { User } from '@prisma/client'
+import { getUserEnrolledCourses } from './course'
 
 type GlobalState = {
   course: CourseState | null
+  allCourses: CourseState[]
   user: User | null
   enrollmentDetails: {
     sectionId: string
@@ -147,9 +149,13 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
     })
   }
 
+  // 5. get All courses
+  const userCourses = await getUserEnrolledCourses(getUser.id)
+
   const data: GlobalState = {
     user: getUser,
     course,
+    allCourses: userCourses.map(enrollment => enrollment.course),
     enrollmentDetails: {
       sectionId: getCourseProgress?.sectionId || course.Section[0].id,
       unitId: getCourseProgress?.unitId || course.Section[0].Unit[0].id,

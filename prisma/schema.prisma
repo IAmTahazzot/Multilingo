@@ -82,6 +82,7 @@ model Section {
   id             String           @id @default(cuid())
   title          String
   description    String
+  sectionIntro   String?
   course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId       String
   createdAt      DateTime         @default(now())

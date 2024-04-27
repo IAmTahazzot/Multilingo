@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const { course, setUser, setCourse, setEnrollmentDetails, requestedLesson } = useGlobalState()
+  const { course, setUser, setCourse, setAllCourses, setEnrollmentDetails, requestedLesson } = useGlobalState()
 
   useEffect(() => {
     const gettingUser = async () => {
@@ -26,6 +26,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         setUser(data.user)
         setCourse(data.course)
+        setAllCourses(data.allCourses)
         setEnrollmentDetails(data.enrollmentDetails)
       }
     }

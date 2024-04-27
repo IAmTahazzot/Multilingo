@@ -70,3 +70,36 @@ export const enrollUser = async (userId: string, courseId: string) => {
     throw new Error('An error occured while enrolling user.')
   }
 }
+
+export const getUserEnrolledCourses = async (userId: string) => {
+  const courses = await db.courseEnrollment.findMany({
+    where: {
+      userId
+    },
+    include: {
+      course: {
+        include: {
+          Section: {
+            include: {
+              Unit: {
+                include: {
+                  Lesson: {
+                    include: {
+                      Question: {
+                        include: {
+                          Option: true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  return courses
+}

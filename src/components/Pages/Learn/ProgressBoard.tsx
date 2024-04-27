@@ -1,12 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Card } from '@/components/Card/Card'
 import { useGlobalState } from '@/hooks/useGlobalState'
 import { useState, useEffect, useMemo } from 'react'
 import { UnitChunk } from './UnitChunk'
-import { Button } from '@/components/ui/button'
 import { Loading } from '@/components/Loading/Loading'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 export const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
 export type Theme = (typeof CARD_THEMES)[number]
@@ -55,7 +55,7 @@ export const ProgressBoard = () => {
       }
     })
 
-    return section;
+    return section
   }, [course, enrollmentDetails, requestedLesson])
 
   const sectionIndex = useMemo(() => {
@@ -126,15 +126,6 @@ export const ProgressBoard = () => {
     }
   }, [course, requestedLesson])
 
-  // useEffect(() => {
-  //   setActiveUnit(prev => ({
-  //     ...prev,
-  //     title: course?.Section[0].Unit[0].title || '',
-  //     id: 1,
-  //     theme: CARD_THEMES[0]
-  //   }))
-  // }, [course])
-
   if (!course || !user) {
     return <Loading />
   }
@@ -144,23 +135,17 @@ export const ProgressBoard = () => {
   }
   return (
     <section>
-      <Button
-        variant={'default'}
-        onClick={() => {
-          setRequestedLesson({
-            ...requestedLesson,
-            sectionId: 'clvgn83cj00e1l24vakwog834'
-          })
-        }}>
-        Section 2
-      </Button>
       <div className='p-2'></div>
       <div className='sticky top-0 z-20'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
-          <h2 className='font-display text-[rgba(255,255,255,.7)] uppercase'>
-            <span>{sectionIndex && `Section: ${sectionIndex}`}</span>
-            <span>, </span>
+          <h2 className='flex items-center gap-2 font-display text-[rgba(255,255,255,.7)] uppercase'>
+            <span>
+              <Link href='/sections'>
+                <ArrowLeft size='20' />
+              </Link>
+            </span>
+            <span>{sectionIndex && `Section: ${sectionIndex}`},</span>
             <span>Unit: {activeUnit.id}</span>
           </h2>
           <h1 className='font-display text-[22px]'>{activeUnit.title}</h1>
