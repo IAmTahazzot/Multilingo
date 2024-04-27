@@ -2,12 +2,7 @@ import type { Config } from 'tailwindcss'
 
 const config = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}'
-  ],
+  content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
   prefix: '',
   theme: {
     container: {
@@ -55,6 +50,11 @@ const config = {
           default: 'var(--color-premium)',
           shadow: 'var(--color-premium-deep)',
           deep: 'var(--color-premium-deep)'
+        },
+        bee: {
+          default: 'var(--color-bee)',
+          shadow: 'var(--color-bee-deep)',
+          deep: 'var(--color-bee-deep)'
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',

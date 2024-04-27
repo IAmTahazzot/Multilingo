@@ -104,7 +104,6 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
 
           const DOM = (
             <LessonButton
-              href='/lesson'
               icon={isCompleted ? 'check' : 'star'}
               key={lesson.id}
               style={{
@@ -126,6 +125,10 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
                   <span>You&apos;ll get 20 XP</span>
                 </div>
               }
+              // requestedLesson= {{
+              //   unitId: unit.id,
+              //   lessonId: lesson.id
+              // }}
             />
           )
 

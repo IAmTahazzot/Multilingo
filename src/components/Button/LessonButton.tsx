@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Card } from '../Card/Card'
 import { useEffect, useState } from 'react'
 import { Button } from './Button'
+import { useRouter } from 'next/navigation'
 
 const Variants = cva(
   'block h-[57px] w-[70px] rounded-[50%] flex items-center justify-center relative active:translate-y-[8px] active:shadow-none outline-none focus:outline-none',
@@ -172,6 +173,7 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   ...props
 }) => {
   const [showLessonBeginButton, setShowLessonBeginButton] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     window.addEventListener('click', () => {
@@ -237,6 +239,9 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
             className='w-full'
             style={{
               color: variant === 'disabled' ? '#999' : 'var(--color-' + variant + ')'
+            }}
+            onClick={() => {
+              router.push('/lesson')
             }}>
             Begin
           </Button>

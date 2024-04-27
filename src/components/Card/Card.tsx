@@ -27,11 +27,13 @@ type CardProps = {
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 } & VariantProps<typeof Variants>
 
-export const Card = ({ children, theme, className, onClick }: CardProps) => {
+export const Card = ({ children, theme, className, onClick, ...props }: CardProps) => {
   return (
     <div
       className={cn(Variants({ theme }), className)}
-      onClick={onClick}>
+      onClick={onClick}
+      {...props}
+      >
       {children}
     </div>
   )

@@ -1,15 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Card } from '@/components/Card/Card'
 import { useGlobalState } from '@/hooks/useGlobalState'
 import { useState, useEffect, useMemo } from 'react'
 import { UnitChunk } from './UnitChunk'
+import { Button } from '@/components/ui/button'
+import { Loading } from '@/components/Loading/Loading'
 
 export const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
 export type Theme = (typeof CARD_THEMES)[number]
 
 export const ProgressBoard = () => {
-  const { course, user, enrollmentDetails } = useGlobalState()
+  const { course, user, enrollmentDetails, requestedLesson, setRequestedLesson } = useGlobalState()
   const [activeUnit, setActiveUnit] = useState<{
     title: string
     id: number
@@ -19,23 +22,59 @@ export const ProgressBoard = () => {
     id: -1,
     theme: 'primary'
   })
-  const sectionId = useMemo(() => {
-    const currentSection = course?.Section.find(section => section.id === enrollmentDetails.sectionId)
-
-    if (!currentSection) {
+  let defaultUnitLessonProgressDirection: 'x' | "x'" = 'x'
+  const section = useMemo(() => {
+    if (!course?.Section) {
       return null
     }
 
-    let ID = course?.Section.findIndex(section => section.id === currentSection.id)
+    if (requestedLesson.sectionId) {
+      const validate = course.Section.find(section => section.id === requestedLesson.sectionId)
 
-    if (ID === undefined) {
+      if (validate) {
+        setActiveUnit(prev => {
+          return {
+            ...prev,
+            title: validate.Unit[0].title || '',
+            id: 1
+          }
+        })
+        return validate
+      }
+
+      console.log('again...')
+    }
+
+    const section = course.Section.find(section => section.id === enrollmentDetails.sectionId)
+
+    setActiveUnit(prev => {
+      return {
+        ...prev,
+        title: section?.Unit[0].title || '',
+        id: 1
+      }
+    })
+
+    return section;
+  }, [course, enrollmentDetails, requestedLesson])
+
+  const sectionIndex = useMemo(() => {
+    if (requestedLesson.sectionId) {
+      const validate = course?.Section.findIndex(section => section.id === requestedLesson.sectionId)
+
+      if (validate && validate !== -1) {
+        return validate + 1
+      }
+    }
+
+    const sectionIndex = course?.Section.findIndex(section => section.id === enrollmentDetails.sectionId)
+
+    if (sectionIndex === undefined) {
       return 0
     }
 
-    return ID + 1
-  }, [course, enrollmentDetails.sectionId])
-
-  let defaultUnitLessonProgressDirection: 'x' | "x'" = 'x'
+    return sectionIndex + 1
+  }, [course, enrollmentDetails.sectionId, requestedLesson])
 
   const ObserverCallback = (entries: IntersectionObserverEntry[]) => {
     entries.forEach(entry => {
@@ -63,7 +102,6 @@ export const ProgressBoard = () => {
       }
     })
   }
-
   const ObserverOption: IntersectionObserverInit = {
     rootMargin: '0px 0px -90% 0px',
     threshold: 0
@@ -86,35 +124,42 @@ export const ProgressBoard = () => {
         Observer.unobserve(unit)
       })
     }
-  }, [course])
+  }, [course, requestedLesson])
 
-  useEffect(() => {
-    setActiveUnit(prev => ({
-      ...prev,
-      title: course?.Section[0].Unit[0].title || '',
-      id: 1,
-      theme: CARD_THEMES[0]
-    }))
-  }, [course])
+  // useEffect(() => {
+  //   setActiveUnit(prev => ({
+  //     ...prev,
+  //     title: course?.Section[0].Unit[0].title || '',
+  //     id: 1,
+  //     theme: CARD_THEMES[0]
+  //   }))
+  // }, [course])
 
   if (!course || !user) {
-    return <div>Loading...</div>
+    return <Loading />
   }
-
-  const section = course.Section.find(section => section.id === enrollmentDetails.sectionId)
 
   if (!section) {
     return <div>No section found, please contact support</div>
   }
-
   return (
     <section>
+      <Button
+        variant={'default'}
+        onClick={() => {
+          setRequestedLesson({
+            ...requestedLesson,
+            sectionId: 'clvgn83cj00e1l24vakwog834'
+          })
+        }}>
+        Section 2
+      </Button>
       <div className='p-2'></div>
       <div className='sticky top-0 z-20'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
           <h2 className='font-display text-[rgba(255,255,255,.7)] uppercase'>
-            <span>{sectionId && `Section: ${sectionId}`}</span>
+            <span>{sectionIndex && `Section: ${sectionIndex}`}</span>
             <span>, </span>
             <span>Unit: {activeUnit.id}</span>
           </h2>

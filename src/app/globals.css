@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  height: 100%;
+}
+
 body {
+  @apply h-full;
   @apply min-h-screen;
   @apply bg-white;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 @layer base {
@@ -16,6 +25,7 @@ body {
     --color-tertiary: #ce82ff;
     --color-success: #00cd9c;
     --color-premium: #3c4dfe;
+    --color-bee: #ffc800;
 
     --shadow-primary-color: #429700;
     --shadow-secondary-color: #1792ca;
@@ -28,6 +38,7 @@ body {
     --color-tertiary-deep: #9b57c9;
     --color-success-deep: #008a67;
     --color-premium-deep: #2c3ad4;
+    --color-bee-deep: #dfae00;
 
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -152,13 +163,12 @@ body {
   }
 }
 
-
 /* 
   NOTE: translate-y-[120%] -translate-x-1/2  is already defined in tailwindcss, so careful on animation
 */
 .anim-pop {
   animation-name: anim-pop;
-  animation-duration: .3s;
+  animation-duration: 0.3s;
   animation-timing-function: linear;
   animation-direction: alternate;
   transform-origin: top;

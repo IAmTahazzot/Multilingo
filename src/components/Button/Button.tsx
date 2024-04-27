@@ -7,6 +7,8 @@ const Variants = cva(
   {
     variants: {
       theme: {
+        default:
+          'bg-white border-t border-l border-r border-neutral-200 text-neutral-500 active:border-2 hover:brightness-100 hover:bg-neutral-100 active:bg-neutral-100',
         primary: 'bg-primary-default border-primary-deep text-white active:border-none',
         secondary: 'bg-secondary-default border-secondary-deep text-white active:border-none',
         tertiary: 'bg-tertiary-default border-tertiary-deep text-white active:border-none',
@@ -17,7 +19,8 @@ const Variants = cva(
         outline:
           'border-2 border-[#84d8ff] bg-sky-50 text-sky-500 hover:brightness-100 active:border-2 active:translate-y-0',
         ghost:
-          'bg-transparent border-2 border-transparent text-neutral-600 active:translate-y-0 hover:brightness-100 hover:bg-neutral-100'
+          'bg-transparent border-2 border-transparent text-neutral-600 active:translate-y-0 hover:brightness-100 hover:bg-neutral-100',
+        disabled: 'bg-neutral-300 text-neutral-600 border-none hover:brightness-100 cursor-not-allowed'
       },
       size: {
         default: 'h-[50px]',

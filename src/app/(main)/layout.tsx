@@ -1,52 +1,38 @@
 'use client'
 
-import { checkUserEnrollment, getCourses } from '@/actions/course'
-import { Loading } from '@/components/Loading/Loading'
-import { BaseNavigation } from '@/components/Navigation/BaseNavigation'
-import { UserNavigation } from '@/components/Navigation/UserNavigation'
-import { ModalType, useModal } from '@/hooks/useModal'
-import { ModalProvider } from '@/providers/ModalProvider'
-import { useUser } from '@clerk/nextjs'
-import { useEffect, useState } from 'react'
+import { getGlobalState } from '@/actions/get-global-state'
+import { setupUser } from '@/actions/setup-user'
+import { useGlobalState } from '@/hooks/useGlobalState'
+import React, { useEffect } from 'react'
+import { toast } from 'sonner'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const [mount, setMount] = useState(false)
-  const { user, isLoaded, isSignedIn } = useUser()
-  const { openModal } = useModal()
+  const { course, setUser, setCourse, setEnrollmentDetails, requestedLesson } = useGlobalState()
 
-  // Checking if user have enrolled in any course:
-  // If not, open the course setup modal
   useEffect(() => {
-    if (!isSignedIn) {
-      return
+    const gettingUser = async () => {
+      // Create new user if user does not exist in the database
+      // NOTE: webhook would be a better solution for this (but it's not implemented yet)
+      await setupUser()
     }
 
-    const didUserEnrolled = async () => {
-      const res = await checkUserEnrollment(user.id)
-      const courses = await getCourses()
+    const gettingGlobalState = async () => {
+      if (!course) {
+        const data = await getGlobalState()
 
-      if (res.length < 1) {
-        openModal(ModalType.COURSE_SETUP, { courses, user })
+        if (!data.user || !data.course) {
+          return toast.error('User or course not found, please try again later')
+        }
+
+        setUser(data.user)
+        setCourse(data.course)
+        setEnrollmentDetails(data.enrollmentDetails)
       }
-
-      setMount(true)
     }
 
-    didUserEnrolled()
-  }, [isSignedIn, user, openModal])
+    gettingUser()
+    gettingGlobalState()
+  }, [])
 
-  if (!isLoaded || !mount) {
-    return <Loading />
-  }
-
-  return (
-    <ModalProvider>
-      <div className='pl-64'>
-        <BaseNavigation>
-          <UserNavigation />
-        </BaseNavigation>
-        <div className='mx-6'>{children}</div>
-      </div>
-    </ModalProvider>
-  )
+  return children
 }

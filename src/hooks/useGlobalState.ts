@@ -19,10 +19,16 @@ type GlobalState = {
     unitId: string
     lessonId: number
     questionCount: number
-  }
+  },
+  requestedLesson: {
+    sectionId: string
+    unitId: string
+    lessonId: number
+  },
   setCourse: (course: CourseState) => void
   setUser: (user: User) => void
   setEnrollmentDetails: (details: GlobalState['enrollmentDetails']) => void
+  setRequestedLesson: (details: GlobalState['requestedLesson']) => void
 }
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -34,7 +40,13 @@ export const useGlobalState = create<GlobalState>(set => ({
     lessonId: 0,
     questionCount: 0
   },
+  requestedLesson: {
+    sectionId: '',
+    unitId: '',
+    lessonId: 0
+  },
   setCourse: course => set({ course }),
   setUser: user => set({ user }),
-  setEnrollmentDetails: details => set({ enrollmentDetails: details })
+  setEnrollmentDetails: details => set({ enrollmentDetails: details }),
+  setRequestedLesson: details => set({ requestedLesson: details })
 }))
