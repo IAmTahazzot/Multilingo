@@ -9,11 +9,13 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { enrollUser } from '@/actions/course'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export const CourseSetupModal = () => {
   const { isOpen, closeModal, data, type } = useModal()
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null)
   const [enrolling, setEnrolling] = useState(false)
+  const router = useRouter()
 
   if (!isOpen || type !== ModalType.COURSE_SETUP) {
     return null
@@ -35,6 +37,10 @@ export const CourseSetupModal = () => {
     } finally {
       setEnrolling(false)
       closeModal()
+
+      if (window) {
+        window.location.reload()
+      }
     }
   }
 
@@ -58,9 +64,7 @@ export const CourseSetupModal = () => {
           ))}
         </div>
         <div>
-          <p className='text-muted-foreground text-sm mt-6'>
-            More courses will be available soon. Stay tuned! 
-          </p>
+          <p className='text-muted-foreground text-sm mt-6'>More courses will be available soon. Stay tuned!</p>
         </div>
         <div className='my-6 flex justify-center'>
           <Button theme='secondary' onClick={enroll} className='md:w-[300px]' disabled={selectedCourse === null}>

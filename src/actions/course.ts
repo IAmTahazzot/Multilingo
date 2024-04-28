@@ -71,7 +71,20 @@ export const enrollUser = async (userId: string, courseId: string) => {
   }
 }
 
-export const getUserEnrolledCourses = async (userId: string) => {
+export const getUserEnrolledCourses = async (userId: string, onlyCourse?: boolean) => {
+  if (onlyCourse) {
+    const courses = await db.courseEnrollment.findMany({
+      where: {
+        userId
+      },
+      include: {
+        course: true
+      }
+    })
+
+    return courses
+  }
+
   const courses = await db.courseEnrollment.findMany({
     where: {
       userId

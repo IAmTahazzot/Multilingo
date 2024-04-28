@@ -25,7 +25,7 @@ export const setupUser = async () => {
       id: user.id,
       email: user.emailAddresses[0].emailAddress,
       username: user?.username || 'user-' + v4(),
-      name: user?.firstName || 'user-' + v4() + ' ' + user?.lastName || ''
+      name: (user?.firstName || 'user-' + v4()) + ' ' + user?.lastName || ''
     }
   })
 

@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 
 export default function Profile() {
   const [userData, setUserData] = useState<User>()
-  const [leaderbaordPosition, setLeaderboardPosition] = useState<number>(-1)
+  const [leaderboardPosition, setLeaderboardPosition] = useState<number>(-1)
   const { user, isLoaded } = useUser()
   const { user: userDataFromDatabase, allCourses } = useGlobalState()
 
@@ -151,7 +151,7 @@ export default function Profile() {
               ) : (
                 <>
                   <h3 className='text-neutral-800 font-display mb-1 text-xl'>
-                    {leaderbaordPosition === -1 ? 'loading...' : leaderbaordPosition}
+                    {leaderboardPosition === -1 ? 'loading...' : leaderboardPosition}
                   </h3>
                   <p className='text-neutral-400'>Leaderboard position</p>
                 </>

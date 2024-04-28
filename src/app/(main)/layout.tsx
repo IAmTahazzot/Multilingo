@@ -18,16 +18,20 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
     const gettingGlobalState = async () => {
       if (!course) {
-        const data = await getGlobalState()
+        try {
+          const data = await getGlobalState()
 
-        if (!data.user || !data.course) {
-          return toast.error('User or course not found, please try again later')
+          if (!data.user || !data.course) {
+            return toast.error('User or course not found, please try again later')
+          }
+
+          setUser(data.user)
+          setCourse(data.course)
+          setAllCourses(data.allCourses)
+          setEnrollmentDetails(data.enrollmentDetails)
+        } catch (error) {
+          console.log('GlobalState update attempt failed', error)
         }
-
-        setUser(data.user)
-        setCourse(data.course)
-        setAllCourses(data.allCourses)
-        setEnrollmentDetails(data.enrollmentDetails)
       }
     }
 
