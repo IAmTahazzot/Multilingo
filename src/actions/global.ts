@@ -40,3 +40,49 @@ export const deductHeart = async (userId: string): Promise<User | number> => {
 
   return updatedUser
 }
+
+
+
+
+/**
+ * This function fills a user's heart count to the maximum of 5 hearts.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ *
+ * @returns {Promise<object>} The updated user object if the operation is successful.
+ *
+ * @throws {Error} If the user is not found in the database.
+ * If the user does not have enough dimonds to fill the hearts, it throws an error.
+ */
+export const fillHearts = async (userId: string): Promise<User> => {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  const userHearts = user.hearts
+  const heartsToFill = 5 - userHearts
+  const dimondCost = 100 * heartsToFill
+  const userDimonds = user.dimond
+
+  if (userDimonds < dimondCost) {
+    throw new Error('Insufficient dimonds')
+  }
+
+  const updatedUser = await db.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      hearts: 5,
+      dimond: userDimonds - dimondCost
+    }
+  })
+
+  return updatedUser
+}

@@ -7,10 +7,12 @@ import { LeaderBoardCard } from './Activity/LeaderboardCard'
 import { useEffect, useState } from 'react'
 import { User } from '@prisma/client'
 import { Loading } from '@/components/Loading/Loading'
+import { usePathname } from 'next/navigation'
 
 export const UserActivity = () => {
   const [user, setUser] = useState<User>()
   const { user: userData } = useGlobalState()
+  const pathName = usePathname()
 
   useEffect(() => {
     if (!userData) return
@@ -29,7 +31,7 @@ export const UserActivity = () => {
         <UserCourseDetails />
 
         <div className='mt-6 space-y-6'>
-          {user.tier === 'FREE' && <PremiumAdsCard />}
+          {user.tier === 'FREE' && pathName !== '/shop' && <PremiumAdsCard />}
           <LeaderBoardCard />
         </div>
       </div>

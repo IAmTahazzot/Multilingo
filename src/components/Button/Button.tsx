@@ -35,7 +35,7 @@ const Variants = cva(
 )
 
 type ButtonProps = {
-  children?: string
+  children?: React.ReactNode
   text?: string
   icon?: React.ReactNode
   type?: 'button' | 'link' | 'submit' | 'reset'
@@ -85,7 +85,8 @@ export const Button = ({
           ...style
         }}>
         {icon && <div className='w-8 h-8 mr-3 flex items-center'>{icon}</div>}
-        <span className={cn(text && 'h-5')}>{text ? text : children ? children : 'Empty button is forbidden'}</span>
+        {text && <span className={cn(text && 'h-5')}>{text}</span>}
+        {children}
       </Link>
     )
   }

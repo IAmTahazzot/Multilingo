@@ -83,9 +83,9 @@ export default function LeaderboardPage() {
               </Link>
             </div>
             <div>
-              <div className='w-fit mx-auto scale-[1.7]'>{ICONS.trophy}</div>
+              <div className='w-fit mx-auto'>{ICONS.trophy}</div>
               <Link href={`/profile/${champions[0].id}`}>
-                <div className='relative top-[40px] flex flex-col items-center gap-2'>
+                <div className='relative top-[0] flex flex-col items-center gap-2'>
                   {loadImage(champions[0].imageUrl, champions[0].name || 'Unknown User')}
                   <span className='font-display text-2xl premium-cta'>{champions[0].name}</span>
                 </div>
