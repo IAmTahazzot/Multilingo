@@ -6,10 +6,14 @@ import { ICONS } from '@/lib/Icons'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { fillHearts } from '@/actions/global'
+import { useState } from 'react'
+import { getUser } from '@/actions/get-user'
+import { ModalType, useModal } from '@/hooks/useModal'
 
 export default function ShopPage() {
-  const { user } = useGlobalState()
-  const router = useRouter()
+  const [fillingHearts, setFillingHearts] = useState(false)
+  const { user, setUser } = useGlobalState()
+  const { openModal } = useModal()
 
   if (!user) {
     return null
@@ -18,6 +22,7 @@ export default function ShopPage() {
   const requiredDimonds = (5 - user.hearts) * 100 // 100 dimonds per heart
 
   const fillMyHearts = async () => {
+    setFillingHearts(true)
     const userHearts = user.hearts
     const heartsToFill = 5 - userHearts
     const dimondCost = 100 * heartsToFill
@@ -29,11 +34,16 @@ export default function ShopPage() {
 
     try {
       await fillHearts(user.id)
-    } catch (e) {
-      toast.error(e.message)
-    }
+      const syncUser = await getUser(user.id)
 
-    router.refresh()
+      if (syncUser) {
+        setUser(syncUser)
+      }
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally {
+      setFillingHearts(false)
+    }
   }
 
   return (
@@ -52,7 +62,12 @@ export default function ShopPage() {
               Start a 2 week free trial to enjoy exclusive Super benefits
             </p>
           </div>
-          <Button theme='white' className='w-full mt-8 text-black'>
+          <Button
+            theme='white'
+            className='w-full mt-8 text-black'
+            onClick={() => {
+              openModal(ModalType.SUPER_SUBSCRIPTION)
+            }}>
             Upgrade to premium
           </Button>
         </div>
@@ -68,28 +83,38 @@ export default function ShopPage() {
             <div>
               <h3 className='text-lg font-display'>Refill Hearts</h3>
               <p className='text-muted-foreground leading-6'>
-                Get full hearts so you can worry less about making mistakes in a lesson
+                {user.tier === 'FREE'
+                  ? 'Get full hearts so you can worry less about making mistakes in a lesson'
+                  : 'You have unlimited hearts with super!'}
               </p>
             </div>
-            <Button
-              theme='default'
-              className='w-[250px] text-secondary-default'
-              onClick={fillMyHearts}
-              disabled={requiredDimonds === 0}>
-              <div className='flex items-center gap-1'>
-                {requiredDimonds !== 0 ? (
-                  <>
-                    <span className='text-neutral-300'>Full</span>
-                  </>
-                ) : (
-                  <>
-                    <span>GET FOR: </span>
-                    <span className='scale-75'>{ICONS.dimond}</span>
-                    <span>{requiredDimonds}</span>
-                  </>
-                )}
-              </div>
-            </Button>
+            {user.tier === 'FREE' && (
+              <Button
+                theme='default'
+                className='w-[250px] text-secondary-default'
+                onClick={fillMyHearts}
+                disabled={requiredDimonds === 0}>
+                <div className='flex items-center gap-1'>
+                  {requiredDimonds === 0 ? (
+                    <>
+                      <span className='text-neutral-300'>Full</span>
+                    </>
+                  ) : (
+                    <>
+                      {fillingHearts ? (
+                        <span>filling...</span>
+                      ) : (
+                        <>
+                          <span>GET FOR: </span>
+                          <span className='scale-75'>{ICONS.dimond}</span>
+                          <span>{requiredDimonds}</span>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -98,11 +123,24 @@ export default function ShopPage() {
           <div className='flex justify-between gap-3 p-4'>
             <div>
               <h3 className='text-lg font-display'>Unlimited Hearts</h3>
-              <p className='text-muted-foreground leading-6'>Never run out of hearts with super!</p>
+              <p className='text-muted-foreground leading-6'>
+                {user.tier !== 'FREE' ? (
+                  <div>
+                    <p className='text-white rounded-full text-sm px-3 pt-1 mt-1 premium-cta border border-premium-default/50'>Super is activated</p>
+                  </div>
+                ) : (
+                  'Never run out of hearts with super!'
+                )}
+              </p>
             </div>
-            <Button theme='default' className='w-[150px] text-secondary-default'>
-              <div className='flex items-center gap-1'>Buy super!</div>
-            </Button>
+            {user.tier === 'FREE' && (
+              <Button
+                theme='default'
+                className='w-[150px] text-secondary-default'
+                onClick={() => openModal(ModalType.SUPER_SUBSCRIPTION)}>
+                <div className='flex items-center gap-1'>Buy super</div>
+              </Button>
+            )}
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 
 export enum ModalType {
-  COURSE_SETUP = 'COURSE_SETUP'
+  COURSE_SETUP = 'COURSE_SETUP',
+  SUPER_SUBSCRIPTION = 'SUPER_SUBSCRIPTION'
 }
 
 type ModalState = {

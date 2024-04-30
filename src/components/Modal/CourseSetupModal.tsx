@@ -36,11 +36,10 @@ export const CourseSetupModal = () => {
       console.error(error)
     } finally {
       setEnrolling(false)
-      closeModal()
-
       if (window) {
         window.location.reload()
       }
+      closeModal()
     }
   }
 

@@ -41,9 +41,6 @@ export const deductHeart = async (userId: string): Promise<User | number> => {
   return updatedUser
 }
 
-
-
-
 /**
  * This function fills a user's heart count to the maximum of 5 hearts.
  *
@@ -81,6 +78,39 @@ export const fillHearts = async (userId: string): Promise<User> => {
     data: {
       hearts: 5,
       dimond: userDimonds - dimondCost
+    }
+  })
+
+  return updatedUser
+}
+
+/**
+ * This function subscribes a user to the Super tier.
+ * It changes the user's tier to 'PREMIUM'.
+ * 
+ * @param {string} userId - The unique identifier of the user.
+ * 
+ * @returns {Promise<object>} The updated user object if the operation is successful.
+ * 
+ * @throws {Error} If the user is not found in the database.
+ */
+export const subscribeToSuperTier = async (userId: string): Promise<User> => {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  const updatedUser = await db.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      tier: 'PREMIUM'
     }
   })
 
