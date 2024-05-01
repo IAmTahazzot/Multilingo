@@ -48,9 +48,6 @@ export default function LeaderboardPage() {
     )
   }
 
-  const champions = leaderboardUsers.slice(0, 3)
-  const otherUsers = leaderboardUsers.slice(3)
-
   const loadImage = (imageUrl: string | null, name: string) => {
     if (imageUrl) {
       return <Image src={imageUrl} alt='user' width={40} height={40} className='rounded-full' priority={false} />
@@ -67,69 +64,18 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className='my-10'>
-      <h1 className='text-3xl font-display'>Leaderboard</h1>
+    <div>
+      <div className="h-10"></div>
+      <div className='sticky top-0 text-center py-10 border-b border-neutral-200'>
+        <h1 className='text-3xl font-display text-neutral-700'>Leaderboard</h1>
+        <p className='text-neutral-400 mt-2'>Earn more xp to get higher rank</p>
+      </div>
 
-      {width >= 768 && (
-        <div className='my-20' title='champions'>
-          <div className='grid grid-cols-3'>
-            <div>
-              <div className='w-fit mx-auto scale-[2.5]'>{ICONS.secondPlace}</div>
-              <Link href={`/profile/${champions[1].id}`}>
-                <div className='relative top-[50px] flex flex-col items-center gap-2'>
-                  {loadImage(champions[1].imageUrl, champions[1].name || 'Unknown User')}
-                  <span className='font-display text-lg'>{champions[1].name || 'Unknown User'} </span>
-                </div>
-              </Link>
-            </div>
-            <div>
-              <div className='w-fit mx-auto'>{ICONS.trophy}</div>
-              <Link href={`/profile/${champions[0].id}`}>
-                <div className='relative top-[0] flex flex-col items-center gap-2'>
-                  {loadImage(champions[0].imageUrl, champions[0].name || 'Unknown User')}
-                  <span className='font-display text-2xl premium-cta'>{champions[0].name}</span>
-                </div>
-              </Link>
-            </div>
-            <div>
-              <div className='w-fit mx-auto scale-[2.5]'>{ICONS.thirdPlace}</div>
-              <Link href={`/profile/${champions[2].id}`}>
-                <div className='relative top-[50px] flex flex-col items-center gap-2'>
-                  {loadImage(champions[2].imageUrl, champions[2].name || 'Unknown User')}
-                  <span className='font-display text-lg'>{champions[2].name || 'Unknown User'}</span>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {width >= 768 && otherUsers.length > 0 && (
-        <div className='border-b-2 pb-4 mt-7'>
-          <h1 className='text-xl font-display'>Others</h1>
-        </div>
-      )}
-
-      <div>
-        {width < 768 && (
-          <>
-            {champions.map((user, index) => (
-              <UserPositionCard
-                key={index}
-                position={index + 1}
-                imageUrl={user.imageUrl || ''}
-                name={user.name || 'Unknown User'}
-                xp={user.xp}
-                id={user.id}
-              />
-            ))}
-          </>
-        )}
-
-        {otherUsers.map((user, index) => (
+      <div className='mt-1'>
+        {leaderboardUsers.map((user, index) => (
           <UserPositionCard
             key={index}
-            position={index + 4}
+            position={index + 1}
             imageUrl={user.imageUrl || ''}
             name={user.name || 'Unknown User'}
             xp={user.xp}
