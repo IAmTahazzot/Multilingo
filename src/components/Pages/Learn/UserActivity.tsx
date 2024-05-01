@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { User } from '@prisma/client'
 import { Loading } from '@/components/Loading/Loading'
 import { usePathname } from 'next/navigation'
+import { Footer } from '@/components/Footer/Footer'
 
 export const UserActivity = () => {
   const [user, setUser] = useState<User>()
@@ -33,6 +34,7 @@ export const UserActivity = () => {
         <div className='mt-6 space-y-6'>
           {user.tier === 'FREE' && pathName !== '/shop' && <PremiumAdsCard />}
           <LeaderBoardCard />
+          <Footer />
         </div>
       </div>
     </aside>

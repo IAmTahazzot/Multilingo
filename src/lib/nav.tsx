@@ -1,4 +1,4 @@
-const Icons = new Map([
+export const NavIcons = new Map([
   [
     'learn',
     <svg key='home-icon' width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -88,21 +88,21 @@ export const UserNavigationList = [
   {
     name: 'Learn',
     href: '/learn',
-    icon: Icons.get('learn')
+    icon: NavIcons.get('learn')
   },
   {
     name: 'Sections',
     href: '/sections',
-    icon: Icons.get('section')
+    icon: NavIcons.get('section')
   },
   {
     name: 'Leaderboard',
     href: '/leaderboard',
-    icon: Icons.get('leaderboard')
+    icon: NavIcons.get('leaderboard')
   },
   {
     name: 'Shop',
     href: '/shop',
-    icon: Icons.get('shop')
+    icon: NavIcons.get('shop')
   }
 ]
