@@ -1,5 +1,6 @@
 import { Course, Lesson, Option, Question, Section, Unit, User } from '@prisma/client'
 import { create } from 'zustand'
+import { mountStoreDevtool } from 'simple-zustand-devtools'
 
 export type CourseState = Course & {
   Section: (Section & {
@@ -16,6 +17,7 @@ type GlobalState = {
   course: CourseState | null
   allCourses: CourseState[]
   enrollmentDetails: {
+    lessonProgressId: string
     sectionId: string
     unitId: string
     lessonId: number
@@ -38,6 +40,7 @@ export const useGlobalState = create<GlobalState>(set => ({
   course: null,
   allCourses: [],
   enrollmentDetails: {
+    lessonProgressId: '',
     sectionId: '',
     unitId: '',
     lessonId: 0,
@@ -54,3 +57,8 @@ export const useGlobalState = create<GlobalState>(set => ({
   setEnrollmentDetails: details => set({ enrollmentDetails: details }),
   setRequestedLesson: details => set({ requestedLesson: details })
 }))
+
+// TODO: remove this line in production
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('Store', useGlobalState)
+}

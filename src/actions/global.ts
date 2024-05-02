@@ -87,11 +87,11 @@ export const fillHearts = async (userId: string): Promise<User> => {
 /**
  * This function subscribes a user to the Super tier.
  * It changes the user's tier to 'PREMIUM'.
- * 
+ *
  * @param {string} userId - The unique identifier of the user.
- * 
+ *
  * @returns {Promise<object>} The updated user object if the operation is successful.
- * 
+ *
  * @throws {Error} If the user is not found in the database.
  */
 export const subscribeToSuperTier = async (userId: string): Promise<User> => {
@@ -115,4 +115,58 @@ export const subscribeToSuperTier = async (userId: string): Promise<User> => {
   })
 
   return updatedUser
+}
+
+/**
+ * This function updates a user's profile information.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ * @param {object} profile - The profile information to update.
+ *
+ * @returns {Promise<object>} The updated user object if the operation is successful.
+ *
+ * @throws {Error} If the user is not found in the database.
+ */
+export const updateProgress = async (progress: {
+  sectionId: string
+  unitId: string
+  lessonId: number
+  questionCount: number
+  lessonProgressId: string
+}) => {
+  const newProgress = await db.lessonProgress.update({
+    where: {
+      id: progress.lessonProgressId
+    },
+    data: {
+      unitId: progress.unitId,
+      lessonId: progress.lessonId,
+      questionCount: progress.questionCount
+    }
+  })
+
+  return newProgress
+}
+
+/**
+ * This function updates a user's profile information.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ * @param {object} profile - The profile information to update.
+ *
+ * @returns {Promise<object>} The updated user object if the operation is successful.
+ *
+ * @throws {Error} If the user is not found in the database.
+ */
+export const updateQuestionCount = async (lessonProgressId: string, questionCount: number) => {
+  const newProgress = await db.lessonProgress.update({
+    where: {
+      id: lessonProgressId
+    },
+    data: {
+      questionCount
+    }
+  })
+
+  return newProgress
 }

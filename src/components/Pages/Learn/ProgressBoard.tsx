@@ -7,6 +7,7 @@ import { UnitChunk } from './UnitChunk'
 import { Loading } from '@/components/Loading/Loading'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { Lesson, Section, Unit } from '@prisma/client'
 
 export const CARD_THEMES = ['primary', 'secondary', 'tertiary', 'success', 'premium', 'danger'] as const
 export type Theme = (typeof CARD_THEMES)[number]
@@ -23,9 +24,13 @@ export const ProgressBoard = () => {
     theme: 'primary'
   })
   let defaultUnitLessonProgressDirection: 'x' | "x'" = 'x'
-  const section = useMemo(() => {
+  const [section, setSection] = useState<(Section & { Unit: (Unit & { Lesson: Lesson[] })[] }) | null>(null)
+
+  useEffect(() => {
     if (!course?.Section) {
-      return null
+      setSection(null)
+
+      return
     }
 
     if (requestedLesson.sectionId) {
@@ -39,10 +44,14 @@ export const ProgressBoard = () => {
             id: 1
           }
         })
-        return validate
-      }
 
-      console.log('again...')
+        setRequestedLesson({
+          ...requestedLesson,
+          sectionId: validate.id
+        })
+
+        setSection(validate)
+      }
     }
 
     const section = course.Section.find(section => section.id === enrollmentDetails.sectionId)
@@ -55,8 +64,15 @@ export const ProgressBoard = () => {
       }
     })
 
-    return section
-  }, [course, enrollmentDetails, requestedLesson])
+    setRequestedLesson({
+      ...requestedLesson,
+      sectionId: section?.id || ''
+    })
+
+    setSection(section || null)
+  }, [course, enrollmentDetails])
+
+  // ... other code ...
 
   const sectionIndex = useMemo(() => {
     if (requestedLesson.sectionId) {
@@ -133,6 +149,7 @@ export const ProgressBoard = () => {
   if (!section) {
     return <div>No section found, please contact support</div>
   }
+
   return (
     <section>
       <div className='p-2'></div>

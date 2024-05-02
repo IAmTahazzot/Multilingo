@@ -1,50 +1,209 @@
 'use client'
 
 import { Button } from '@/components/Button/Button'
-import { Card } from '@/components/Card/Card'
 import { useGlobalState } from '@/hooks/useGlobalState'
-import Image from 'next/image'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { MultipleChoiceImage } from './QuestionTypes/MultipleChoiceImage'
 import { MultipleChoice } from './QuestionTypes/MultipleChoice'
 import { cn } from '@/lib/utils'
 import { complimentMessages } from '@/lib/complimentMessages'
-import { deductHeart } from '@/actions/global'
+import { deductHeart, updateProgress, updateQuestionCount } from '@/actions/global'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { LessonReview } from './LessonReview'
+import { TrueFalseOptions } from './QuestionTypes/TrueFalse'
 
 export const LessonContent = () => {
-  const { user, course, enrollmentDetails, setUser } = useGlobalState()
+  const { user, course, enrollmentDetails, setEnrollmentDetails, setUser, requestedLesson } = useGlobalState()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [answer, setAnswer] = useState<string>('')
+  const [answer, setAnswer] = useState<string>('') // option id
   const [isChecked, setIsChecked] = useState<boolean>(false)
   const [selectedDOM, setSelectedDOM] = useState<HTMLElement | null>(null)
   const [lessonProgressPercentage, setLessonProgressPercentage] = useState<number>(0)
   const [lessonCompleted, setLessonCompleted] = useState<boolean>(false)
+  const [wrongAnswers, setWrongAnswers] = useState<{}[]>([])
 
+  /**
+   * # STEPS
+   *
+   * 1. show requested lesson (don't add xp or update enrollment progress if lesson is already completed)
+   * 2. if not requested, show enrollment progress lesson
+   * 3. show only 5 questions at a time
+   * 4. update enroll progress at the end of the lesson
+   */
   const questions = useMemo(() => {
-    return course?.Section.find(section => section.id === enrollmentDetails?.sectionId)
+    const questionCompleted = enrollmentDetails.questionCount
+
+    // if requested lesson found
+    const { sectionId, unitId, lessonId } = requestedLesson
+
+    if (sectionId || unitId || lessonId) {
+      if (
+        enrollmentDetails.sectionId === sectionId &&
+        enrollmentDetails.unitId === unitId &&
+        enrollmentDetails.lessonId === lessonId
+      ) {
+        // if lesson is the same as enrollment progress, show only the remaining questions
+        return (
+          course?.Section.find(section => section.id === sectionId)
+            ?.Unit.find(unit => unit.id === unitId)
+            ?.Lesson.find(lesson => lesson.id === lessonId)
+            ?.Question.slice(questionCompleted, questionCompleted + 5) || []
+        )
+      } else {
+        // lesson is already completed, show all questions
+        return (
+          course?.Section.find(section => section.id === sectionId)
+            ?.Unit.find(unit => unit.id === unitId)
+            ?.Lesson.find(lesson => lesson.id === lessonId)?.Question || []
+        )
+      }
+    }
+
+    // if nothing is requested, show the current lesson from the user enrollMent progress
+    // this will only happen if user refreshing the /lesson page or navigating back to the lesson page
+    const questionCollection = course?.Section.find(section => section.id === enrollmentDetails?.sectionId)
       ?.Unit.find(unit => unit.id === enrollmentDetails?.unitId)
       ?.Lesson.find(lesson => lesson.id === enrollmentDetails?.lessonId)?.Question
-  }, [course, enrollmentDetails])
 
-  if (!user || !course || !enrollmentDetails) {
+    if (!questionCollection) {
+      return []
+    }
+
+    return questionCollection.slice(questionCompleted, questionCompleted + 5)
+  }, [course, enrollmentDetails, requestedLesson])
+
+  if (!user || !course || !enrollmentDetails || !requestedLesson) {
     return null
   }
 
-  if (!questions) {
+  if (!questions || questions.length === 0) {
     return <div>No questions found</div>
   }
 
+  console.log(questions)
+
   const question = questions[currentQuestionIndex]
   const correctOption = question.Option.find(o => o.isCorrect)
+
+  const getNextProgress: () => {
+    sectionId: string
+    unitId: string
+    lessonId: number
+  } | null = () => {
+    // if lesson is completed, set to next lesson
+    const currentLessonIndex = course.Section.find(section => section.id === enrollmentDetails.sectionId)
+      ?.Unit.find(unit => unit.id === enrollmentDetails.unitId)
+      ?.Lesson.findIndex(lesson => lesson.id === enrollmentDetails.lessonId)! // ! is safe because we already checked if the lesson exists
+
+    const nextLesson = course.Section.find(section => section.id === enrollmentDetails.sectionId)?.Unit.find(
+      unit => unit.id === enrollmentDetails.unitId
+    )?.Lesson[currentLessonIndex + 1]
+
+    if (nextLesson) {
+      return {
+        sectionId: enrollmentDetails.sectionId,
+        unitId: enrollmentDetails.unitId,
+        lessonId: nextLesson.id
+      }
+    }
+
+    // no more lessons, set to next unit and first lesson
+    const currentUnitIndex = course.Section.find(section => section.id === enrollmentDetails.sectionId)?.Unit.findIndex(
+      unit => unit.id === enrollmentDetails.unitId
+    )!
+
+    const nextUnit = course.Section.find(section => section.id === enrollmentDetails.sectionId)?.Unit[
+      currentUnitIndex + 1
+    ]
+
+    if (nextUnit) {
+      return {
+        sectionId: enrollmentDetails.sectionId,
+        unitId: nextUnit.id,
+        lessonId: nextUnit.Lesson[0].id // new unit, so start from the first lesson
+      }
+    }
+
+    // if no more units, set to next section and first unit and first lesson
+    const currentSectionIndex = course.Section.findIndex(section => section.id === enrollmentDetails.sectionId)
+    const nextSection = course.Section[currentSectionIndex + 1]
+
+    if (nextSection) {
+      return {
+        sectionId: nextSection.id,
+        unitId: nextSection.Unit[0].id,
+        lessonId: nextSection.Unit[0].Lesson[0].id // new section, so start from the first lesson
+      }
+    }
+
+    // no more sections, course is completed
+    return null
+  }
+
+  const updateLessonProgress = async () => {
+    // 1. total questions - wrong answers to be added to the progress question Count if (lesson question length > question count)
+    // 2. update enrollment progress on global state
+    const increaseBy = 5 - wrongAnswers.length
+    const newQuestionCount = enrollmentDetails.questionCount + increaseBy
+
+    if (newQuestionCount >= questions.length) {
+      // lesson is completed set to next
+      try {
+        const nextProgressData = getNextProgress()
+
+        if (!nextProgressData) {
+          // course is completed
+          return console.log('wtf, course is completed')
+        }
+
+        const { sectionId, unitId, lessonId } = nextProgressData
+
+        const newProgress = await updateProgress({
+          sectionId: sectionId,
+          unitId: unitId,
+          lessonId: lessonId,
+          questionCount: 0,
+          lessonProgressId: enrollmentDetails.lessonProgressId
+        })
+
+        if (newProgress) {
+          setEnrollmentDetails({
+            ...enrollmentDetails,
+            sectionId: sectionId,
+            unitId: unitId,
+            lessonId: lessonId,
+            questionCount: 0
+          })
+        }
+      } catch (error) {
+        return toast.error('Failed to update user progress. Please try again.')
+      } finally {
+        return
+      }
+    }
+
+    // lesson is not completed, update question count only
+    try {
+      const afterQuestionCountUpdated = await updateQuestionCount(enrollmentDetails.lessonProgressId, newQuestionCount)
+
+      if (afterQuestionCountUpdated) {
+        setEnrollmentDetails({
+          ...enrollmentDetails,
+          questionCount: newQuestionCount
+        })
+      }
+    } catch (error) {
+      return toast.error('Failed to update user progress. Please try again.')
+    }
+  }
 
   const checkAnswer = async () => {
     if (isChecked) {
       // check if there are more questions
       if (currentQuestionIndex + 1 === questions.length) {
         setLessonCompleted(true)
+        updateLessonProgress()
         return
       }
 
@@ -54,6 +213,7 @@ export const LessonContent = () => {
       return setSelectedDOM(null)
     }
 
+    // answer is the option id
     if (answer === correctOption?.id) {
       // correct
       selectedDOM?.classList.remove(
@@ -66,6 +226,9 @@ export const LessonContent = () => {
       selectedDOM?.classList.add('border-[#a5ed6e]', 'bg-[#d7ffb8]', 'hover:bg-[#d7ffb8]')
     } else {
       // wrong
+
+      // add wrong answer to the list
+      setWrongAnswers(prev => [...prev, question])
 
       // update option card UI
       selectedDOM?.classList.remove('border-sky-500', 'bg-sky-100', 'hover:bg-sky-200')
@@ -96,6 +259,7 @@ export const LessonContent = () => {
     // update progress bar
     setLessonProgressPercentage(((currentQuestionIndex + 1) / questions.length) * 100)
 
+    // show it's already checked (next click will continue to the next question)
     setIsChecked(true)
   }
 
@@ -110,6 +274,10 @@ export const LessonContent = () => {
 
   const MULTIPLE_CHOICE_OPTIONS = question.type === 'MULTIPLE_CHOICE' && (
     <MultipleChoice question={question} setAnswer={setAnswer} isChcked={isChecked} setSelectedDOM={setSelectedDOM} />
+  )
+
+  const TRUE_FALSE_OPTIONS = question.type === 'TRUE_FALSE' && (
+    <TrueFalseOptions question={question} setAnswer={setAnswer} isChcked={isChecked} setSelectedDOM={setSelectedDOM} />
   )
 
   const CHECKED_REVIEW = (
@@ -221,6 +389,7 @@ export const LessonContent = () => {
           {/* BEGIN: QUESTION OPTIONS USING THEIR OWN TYPE */}
           {MULTIPLE_CHOICE_IMAGE_OPTIONS}
           {MULTIPLE_CHOICE_OPTIONS}
+          {TRUE_FALSE_OPTIONS}
           {/* END: QUESTION OPTIONS */}
         </LessonContentContainer>
       </main>

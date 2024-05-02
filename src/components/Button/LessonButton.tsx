@@ -6,6 +6,7 @@ import { Card } from '../Card/Card'
 import { useEffect, useState } from 'react'
 import { Button } from './Button'
 import { useRouter } from 'next/navigation'
+import { useGlobalState } from '@/hooks/useGlobalState'
 
 const Variants = cva(
   'block h-[57px] w-[70px] rounded-[50%] flex items-center justify-center relative active:translate-y-[8px] active:shadow-none outline-none focus:outline-none',
@@ -152,11 +153,16 @@ type LessonButtonProps = {
   icon: keyof typeof Icons
   className?: string
   style?: React.CSSProperties
+  positionLeft?: number
   disabled?: boolean
   id?: string
   isActive?: boolean
   activeFillPercentage?: number
   lessonBeginDescription?: React.ReactNode
+  requestedLesson: {
+    unitId: string
+    lessonId: number
+  }
 } & VariantProps<typeof Variants>
 
 export const LessonButton: React.FC<LessonButtonProps> = ({
@@ -165,15 +171,18 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   variant,
   className,
   style = {},
+  positionLeft = 0,
   disabled = false,
   id,
   isActive,
   activeFillPercentage = 0,
   lessonBeginDescription = '',
+  requestedLesson,
   ...props
 }) => {
   const [showLessonBeginButton, setShowLessonBeginButton] = useState(false)
   const router = useRouter()
+  const { setRequestedLesson, requestedLesson: prevRequestedLesson } = useGlobalState()
 
   useEffect(() => {
     window.addEventListener('click', () => {
@@ -205,12 +214,12 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   )
 
   const progressCircle = (
-    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[270deg] h-[100px] w-[100px]'>
+    <div className='rotate-[270deg] h-[100px] w-[100px]'>
       <svg
         width='100'
         height='100'
         viewBox='0 0 100 100'
-        className='circular-progress absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+        className='circular-progress'>
         <circle className='bg' cy='50' cx='50' r='46' strokeWidth='8px' stroke='#eee' fill='none'></circle>
         <circle
           className='fg'
@@ -241,6 +250,10 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
               color: variant === 'disabled' ? '#999' : 'var(--color-' + variant + ')'
             }}
             onClick={() => {
+              setRequestedLesson({
+                ...prevRequestedLesson,
+                ...requestedLesson
+              })
               router.push('/lesson')
             }}>
             Begin
@@ -258,14 +271,18 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   )
 
   return (
-    <div className={cn('relative', isActive && 'mt-12 mb-4')}>
+    <div className={cn('relative', isActive && '!mt-12 !mb-4')}>
       {isActive && (
-        <>
+        <div
+          style={{
+            position: 'absolute',
+            left: positionLeft - 15 + 'px',
+            top: '-20px'
+          }}>
           {!showLessonBeginButton && startTooltip}
           {progressCircle}
-        </>
+        </div>
       )}
-      {showLessonBeginButton && lessonBeginButton}
       <button
         onClick={e => {
           e.stopPropagation()
@@ -282,6 +299,7 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
         {...props}>
         <span className='text-white opacity-20 absolute'>{icon === 'check' && ActiveIconGlamorous}</span>
         <span className='z-[5]'>{Icons[icon](null, null, disabled ? '#afafaf' : '#fff')}</span>
+        {showLessonBeginButton && lessonBeginButton}
       </button>
     </div>
   )

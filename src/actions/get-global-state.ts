@@ -157,6 +157,7 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
     course,
     allCourses: userCourses.map(enrollment => enrollment.course),
     enrollmentDetails: {
+      lessonProgressId: getCourseProgress?.id || '',
       sectionId: getCourseProgress?.sectionId || course.Section[0].id,
       unitId: getCourseProgress?.unitId || course.Section[0].Unit[0].id,
       lessonId: getCourseProgress?.lessonId || 0,

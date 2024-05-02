@@ -29,14 +29,14 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
     const activeLessonDOM = document.querySelector('[data-active-lesson="true"]')
 
     if (activeLessonDOM) {
-      // activeLessonDOM.scrollIntoView({
-      //   behavior: 'smooth',
-      //   block: 'center',
-      //   inline: 'center'
-      // })
-      const yOffSet = -180
-      const y = activeLessonDOM.getBoundingClientRect().top + window.scrollY + yOffSet
-      window.scrollTo({ top: y, behavior: 'smooth' })
+      activeLessonDOM.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      })
+      // const yOffSet = -200
+      // const y = activeLessonDOM.getBoundingClientRect().top + window.scrollY + yOffSet
+      // window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }, [])
 
@@ -110,6 +110,7 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
                 position: 'relative',
                 left: `${positionMap.get(LessonCardPosition.position)}px`
               }}
+              positionLeft={positionMap.get(LessonCardPosition.position)}
               disabled={variant === 'disabled'}
               variant={variant}
               id={'lesson-' + lesson.id}
@@ -125,10 +126,10 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
                   <span>You&apos;ll get 20 XP</span>
                 </div>
               }
-              // requestedLesson= {{
-              //   unitId: unit.id,
-              //   lessonId: lesson.id
-              // }}
+              requestedLesson={{
+                unitId: unit.id,
+                lessonId: lesson.id
+              }}
             />
           )
 
