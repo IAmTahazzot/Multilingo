@@ -3,6 +3,7 @@
 import { checkUserEnrollment, getCourses } from '@/actions/course'
 import { Loading } from '@/components/Loading/Loading'
 import { BaseNavigation } from '@/components/Navigation/BaseNavigation'
+import { SmallDeviceNavigation } from '@/components/Navigation/SmallDeviceNavigation'
 import { UserNavigation } from '@/components/Navigation/UserNavigation'
 import { UserActivity } from '@/components/Pages/Learn/UserActivity'
 import { ModalType, useModal } from '@/hooks/useModal'
@@ -42,15 +43,14 @@ export default function OtherLayout({ children }: { children: React.ReactNode })
 
   return (
     <ModalProvider>
-      <div className='pl-64'>
-        <BaseNavigation>
+      <div className='md:pl-[72px] lg:pl-64'>
+        <BaseNavigation className='hidden md:block'>
           <UserNavigation />
         </BaseNavigation>
-        <div className='mx-6'>
-          <div className='grid grid-cols-[1fr_370px] gap-10'>
-            <div className='px-6'>
-              {children}
-            </div>
+        <SmallDeviceNavigation />
+        <div className='mx-2 lg:mx-6'>
+          <div className='grid grid-cols-1 md:grid-cols-[1fr_290px] xl:grid-cols-[1fr_370px] gap-10 lg:max-w-[1050px] mx-auto'>
+            <div className='px-2 md:px-6'>{children}</div>
             <UserActivity />
           </div>
         </div>

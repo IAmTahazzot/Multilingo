@@ -84,22 +84,22 @@ export default function ProfileView() {
         />
       )}
 
-      <div className='grid grid-cols-2 gap-4'>
-        <div className='justify-self-start'>
-          <h1
-            className={cn(
-              'text-3xl font-bold mt-6 font-display text-neutral-700',
-              leaderboardPosition === 1 && 'premium-cta'
-            )}>
-            {user.name}
-          </h1>
+      <div className='grid grid-cols-2'>
+        <h1
+          className={cn(
+            'col-span-2 text-3xl font-bold mt-6 font-display text-neutral-700',
+            leaderboardPosition === 1 && 'premium-cta'
+          )}>
+          {user.name}
+        </h1>
+        <div className='self-end'>
           <p className='text-neutral-500'>Joined at {joinedDate}</p>
         </div>
-        <div className='flex gap-2 justify-self-end self-end'>
+        <div className='flex items-end justify-end gap-2'>
           {allCourses.map(course => {
             return (
               <div key={course.id}>
-                <div className='w-10 h-8'>
+                <div className='w-10 h-8 overflow-hidden'>
                   <svg pointerEvents={'none'}>
                     <use xlinkHref={'/svg/flags.svg#' + course.language} className='scale-[50%]' />
                   </svg>
@@ -117,14 +117,18 @@ export default function ProfileView() {
         <h1 className='text-3xl font-bold mt-6 font-display text-neutral-700'>Statistics</h1>
 
         <div className='grid grid-cols-2 gap-6 mt-4'>
-          <Card theme={'default'} className='flex gap-4 py-3'>
+          <Card
+            theme={'default'}
+            className='flex flex-col md:flex-row items-center md:items-stretch text-center md:text-left gap-4 py-3'>
             <div>{ICONS.lightningStrike}</div>
             <div>
               <h3 className='text-neutral-800 font-display mb-1 text-xl'>{user.xp}</h3>
               <p className='text-neutral-400'>Total XP</p>
             </div>
           </Card>
-          <Card theme={'default'} className='flex gap-4 py-3'>
+          <Card
+            theme={'default'}
+            className='flex flex-col md:flex-row items-center md:items-stretch text-center md:text-left gap-4 py-3'>
             <div>
               {leaderboardPosition === 1 ? <div className='w-10 h-10'>{ICONS.trophy}</div> : ICONS.lightningStrike}
             </div>

@@ -6,8 +6,8 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className='h-screen grid grid-cols-[30vw_1fr]'>
-      <div className='bg-green-100'>
+    <div className='h-screen grid place-content-center lg:place-content-stretch lg:grid-cols-[30vw_1fr]'>
+      <div className='bg-green-100 hidden lg:block'>
         <div className='h-full flex flex-col items-center justify-center gap-4'>
           <Image
             src='/bird.svg'

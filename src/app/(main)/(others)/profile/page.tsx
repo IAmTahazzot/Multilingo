@@ -4,6 +4,7 @@ import { getUserPosition } from '@/actions/leaderboard'
 import { Card } from '@/components/Card/Card'
 import { Loading } from '@/components/Loading/Loading'
 import { useGlobalState } from '@/hooks/useGlobalState'
+import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/nextjs'
 import { User } from '@prisma/client'
 import Image from 'next/image'
@@ -68,16 +69,23 @@ export default function Profile() {
         priority={true}
       />
 
-      <div className='grid grid-cols-2 gap-4'>
-        <div className='justify-self-start'>
-          <h1 className='text-3xl font-bold mt-6 font-display text-neutral-700'>{user.fullName}</h1>
+      <div className='grid grid-cols-2'>
+        <h1
+          className={cn(
+            'col-span-2 text-3xl font-bold mt-6 font-display text-neutral-700',
+            leaderboardPosition === 1 && 'premium-cta'
+          )}>
+          {user.fullName}
+        </h1>
+        <div className='self-end'>
           <p className='text-neutral-500'>Joined at {joinedDate}</p>
         </div>
-        <div className='flex gap-2 justify-self-end self-end'>
+
+        <div className='flex items-end justify-end gap-2'>
           {allCourses.map(course => {
             return (
               <div key={course.id}>
-                <div className='w-10 h-8'>
+                <div className='w-10 h-8 overflow-hidden'>
                   <svg pointerEvents={'none'}>
                     <use xlinkHref={'/svg/flags.svg#' + course.language} className='scale-[50%]' />
                   </svg>
@@ -95,7 +103,9 @@ export default function Profile() {
         <h1 className='text-3xl font-bold mt-6 font-display text-neutral-700'>Statistics</h1>
 
         <div className='grid grid-cols-2 gap-6 mt-4'>
-          <Card theme={'default'} className='flex gap-4 py-3'>
+          <Card
+            theme={'default'}
+            className='flex flex-col md:flex-row items-center md:items-stretch text-center md:text-left gap-4 py-3'>
             <div>
               <svg width='22' height='30' viewBox='0 0 22 30' fill='none' xmlns='http://www.w3.org/2000/svg'>
                 <path
@@ -119,7 +129,9 @@ export default function Profile() {
               <p className='text-neutral-400'>Total XP</p>
             </div>
           </Card>
-          <Card theme={'default'} className='flex gap-4 py-3'>
+          <Card
+            theme={'default'}
+            className='flex flex-col md:flex-row items-center md:items-stretch text-center md:text-left gap-4 py-3'>
             <div>
               <svg width='19' height='23' viewBox='0 0 19 23' fill='none' xmlns='http://www.w3.org/2000/svg'>
                 <path

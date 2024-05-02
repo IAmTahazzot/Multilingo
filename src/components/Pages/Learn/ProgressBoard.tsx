@@ -152,11 +152,11 @@ export const ProgressBoard = () => {
 
   return (
     <section>
-      <div className='p-2'></div>
+      <div className='lg:p-2'></div>
       <div className='sticky top-0 z-20'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
-          <h2 className='flex items-center gap-2 font-display text-[rgba(255,255,255,.7)] uppercase'>
+          <h2 className='flex items-center gap-2 font-display text-[rgba(255,255,255,.7)] uppercase text-[15px] md:text-base'>
             <span>
               <Link href='/sections'>
                 <ArrowLeft size='20' />
@@ -165,7 +165,7 @@ export const ProgressBoard = () => {
             <span>{sectionIndex && `Section: ${sectionIndex}`},</span>
             <span>Unit: {activeUnit.id}</span>
           </h2>
-          <h1 className='font-display text-[22px]'>{activeUnit.title}</h1>
+          <h1 className='font-display text-[20px] md:text-[22px]'>{activeUnit.title}</h1>
         </Card>
       </div>
 

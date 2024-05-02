@@ -10,12 +10,12 @@ type MultipleChoiceProps = {
 
 export const MultipleChoice = ({ question, setAnswer, setSelectedDOM, isChcked }: MultipleChoiceProps) => {
   return (
-    <div className='flex gap-4'>
+    <div className='flex flex-wrap gap-4'>
       {question.Option.map(option => (
         <Card
           key={option.id}
           theme='smallCard'
-          className='flex-1'
+          className='flex-1 min-w-[200px]'
           data-card={true}
           onClick={e => {
             if (isChcked) return

@@ -15,5 +15,5 @@ export default function LearnPage() {
     )
   }
 
-  return <ProgressBoard /> 
+  return <ProgressBoard />
 }

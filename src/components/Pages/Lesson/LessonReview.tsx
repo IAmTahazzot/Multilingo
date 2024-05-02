@@ -15,7 +15,7 @@ export const LessonReview = () => {
         backgroundColor: '#fbfbfa'
       }}>
       <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />
-      <div className='self-center justify-self-center'>
+      <div className='grid place-content-center'>
         <div>
           <Image
             src={'/img/duolingo-hungboris.gif'}
@@ -89,7 +89,7 @@ export const LessonReview = () => {
       </div>
 
       <footer className='border-t border-neutral-200'>
-        <div className='flex items-center justify-end max-w-[1024px] mx-auto w-full h-full'>
+        <div className='flex items-center justify-end max-w-[1024px] mx-auto w-full h-full px-6'>
           <Button theme={'primary'} width={150} type='link' href='/learn'>
             Continue
           </Button>

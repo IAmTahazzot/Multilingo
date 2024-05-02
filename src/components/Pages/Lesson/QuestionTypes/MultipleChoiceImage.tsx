@@ -12,12 +12,12 @@ type MultipleChoiceImageProps = {
 
 export const MultipleChoiceImage = ({ question, setAnswer, setSelectedDOM, isChcked }: MultipleChoiceImageProps) => {
   return (
-    <div className='flex gap-4'>
+    <div className='flex gap-4 flex-wrap'>
       {question.Option.map(option => (
         <Card
           key={option.id}
           theme='smallCard'
-          className='flex-1'
+          className='flex-1 min-w-[200px]'
           onClick={e => {
             if (isChcked) return
 

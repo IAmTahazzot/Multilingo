@@ -284,7 +284,7 @@ export const LessonContent = () => {
     <div>
       {answer === correctOption?.id ? (
         <div className='flex gap-6 items-center'>
-          <div className='flex items-center justify-center h-20 w-20 rounded-full bg-white'>
+          <div className='hidden md:flex items-center md:justify-center h-20 w-20 rounded-full bg-white'>
             <svg width='41' height='29' viewBox='0 0 41 29' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M5 13.6043L14.5303 23.0583C15.2284 23.7509 16.3544 23.7509 17.0525 23.0583L35.2565 5'
@@ -303,7 +303,7 @@ export const LessonContent = () => {
         </div>
       ) : (
         <div className='flex gap-6 items-center'>
-          <div className='flex items-center justify-center h-20 w-20 rounded-full bg-white'>
+          <div className='hidden md:flex items-center md:justify-center h-20 w-20 rounded-full bg-white'>
             <svg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 fillRule='evenodd'
@@ -338,9 +338,9 @@ export const LessonContent = () => {
   }
 
   return (
-    <div className='grid grid-rows-[100px_1fr_140px] grid-cols-[100%] min-h-[690px] h-full'>
+    <div className='grid grid-rows-[100px_1fr_160px] md:grid-rows-[100px_1fr_140px] grid-cols-[100%] gap-4 min-h-[690px] h-full'>
       <header className='w-full self-center'>
-        <LessonContentContainer className='flex items-center justify-between gap-6'>
+        <LessonContentContainer className='flex items-center justify-between gap-6 mx-6'>
           <Link href='/learn'>
             <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
@@ -383,7 +383,7 @@ export const LessonContent = () => {
       </header>
 
       <main className='w-full self-center'>
-        <LessonContentContainer className='max-w-[700px]'>
+        <LessonContentContainer className='mx-6 md:mx-auto max-w-3xl'>
           <h1 className='font-display text-[36px] pl-1 mb-14'>{question.title}</h1>
 
           {/* BEGIN: QUESTION OPTIONS USING THEIR OWN TYPE */}
@@ -400,25 +400,25 @@ export const LessonContent = () => {
           isChecked ? 'border-transparent' : 'border-neutral-200',
           isChecked && (answer === correctOption?.id ? 'bg-[#d7ffb8]' : 'bg-[#ffedf0]')
         )}>
-        <div className='flex items-center justify-between max-w-[1024px] mx-auto w-full'>
+        <LessonContentContainer className='flex flex-col md:flex-row md:items-center gap-2 md:gap-0 justify-between mx-6 w-full'>
           <div>
             {isChecked ? (
               CHECKED_REVIEW
             ) : (
-              <Button theme='default' className='w-[150px]'>
+              <Button theme='default' className='md:w-[150px] w-full'>
                 Skip
               </Button>
             )}
           </div>
-          <Button theme={ACTION_BUTTON_THEME} className='w-[150px]' disabled={!answer} onClick={checkAnswer}>
+          <Button theme={ACTION_BUTTON_THEME} className='w-full md:w-[150px]' disabled={!answer} onClick={checkAnswer}>
             {!answer || !isChecked ? 'Check' : 'Continue'}
           </Button>
-        </div>
+        </LessonContentContainer>
       </footer>
     </div>
   )
 }
 
 const LessonContentContainer = ({ children, className }: { children: React.ReactNode; className?: string }) => {
-  return <div className={cn('max-w-[1024px] mx-auto', className)}>{children}</div>
+  return <div className={cn('xl:max-w-[1024px] xl:mx-auto', className)}>{children}</div>
 }

@@ -215,11 +215,7 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
 
   const progressCircle = (
     <div className='rotate-[270deg] h-[100px] w-[100px]'>
-      <svg
-        width='100'
-        height='100'
-        viewBox='0 0 100 100'
-        className='circular-progress'>
+      <svg width='100' height='100' viewBox='0 0 100 100' className='circular-progress'>
         <circle className='bg' cy='50' cx='50' r='46' strokeWidth='8px' stroke='#eee' fill='none'></circle>
         <circle
           className='fg'
@@ -239,7 +235,7 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   )
 
   const lessonBeginButton = (
-    <div className='absolute left-1/2 top-[162%] -translate-x-1/2 z-10 w-[300px]' id='lessonBeginButton'>
+    <div className='absolute left-1/2 top-[162%] -translate-x-1/2 w-[300px] z-10' id='lessonBeginButton'>
       <Card theme={variant} className='w-full anim-pop' onClick={e => e.stopPropagation()}>
         <div className='space-y-4'>
           <span className='font-display text-basetext-white'>{lessonBeginDescription}</span>
