@@ -72,8 +72,6 @@ export const ProgressBoard = () => {
     setSection(section || null)
   }, [course, enrollmentDetails])
 
-  // ... other code ...
-
   const sectionIndex = useMemo(() => {
     if (requestedLesson.sectionId) {
       const validate = course?.Section.findIndex(section => section.id === requestedLesson.sectionId)
