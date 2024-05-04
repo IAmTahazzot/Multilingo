@@ -32,6 +32,7 @@ export const LessonContent = () => {
    * 4. update enroll progress at the end of the lesson
    */
   const questions = useMemo(() => {
+    console.log('holy f question is being called')
     const questionCompleted = enrollmentDetails.questionCount
 
     // if requested lesson found
@@ -80,8 +81,6 @@ export const LessonContent = () => {
   if (!questions || questions.length === 0) {
     return <div>No questions found</div>
   }
-
-  console.log(questions)
 
   const question = questions[currentQuestionIndex]
   const correctOption = question.Option.find(o => o.isCorrect)
@@ -213,6 +212,7 @@ export const LessonContent = () => {
       return setSelectedDOM(null)
     }
 
+    // console.log(answer, correctOption?.id)
     // answer is the option id
     if (answer === correctOption?.id) {
       // correct
@@ -317,7 +317,9 @@ export const LessonContent = () => {
           <div className='space-y-2'>
             <h1 className='text-rose-600 font-display text-2xl'>Correct solution:</h1>
             <p className='text-rose-600'>
-              {question.Option.find(o => o.isCorrect)?.title || 'No correct answer found'}
+              {question.type === 'TRUE_FALSE'
+                ? 'True'
+                : question.Option.find(o => o.isCorrect)?.title || 'No correct answer found'}
             </p>
           </div>
         </div>

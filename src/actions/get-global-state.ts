@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { currentUser } from '@clerk/nextjs'
 import { User } from '@prisma/client'
 import { getUserEnrolledCourses } from './course'
+import fs from 'fs'
 
 type GlobalState = {
   course: CourseState | null
@@ -164,6 +165,10 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
       questionCount: getCourseProgress?.questionCount || 0
     }
   }
+
+  // add to data.json file
+ fs.writeFileSync('data.json', JSON.stringify(data, null, 2))
+
 
   return data
 }

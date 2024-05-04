@@ -1,5 +1,6 @@
 import { Card } from '@/components/Card/Card'
 import { Question, Option } from '@prisma/client'
+import { useMemo } from 'react'
 
 type TrueFalseOptionsProps = {
   question: Question & { Option: Option[] }
@@ -11,14 +12,16 @@ type TrueFalseOptionsProps = {
 export const TrueFalseOptions = ({ question, setAnswer, setSelectedDOM, isChcked }: TrueFalseOptionsProps) => {
   const IS_TRUE = question.Option[0].isCorrect
   const ID = question.Option[0].id
+  const ID_ONE = useMemo(() => Math.random().toString(36).substring(7), [question])
+  const ID_TWO = useMemo(() => Math.random().toString(36).substring(7), [question])
 
   const options = [
     {
-      id: IS_TRUE ? ID : '1',
+      id: IS_TRUE ? ID : '1' + ID_ONE,
       title: 'True'
     },
     {
-      id: !IS_TRUE ? ID : '2',
+      id: !IS_TRUE ? ID : '2' + ID_TWO,
       title: 'False'
     }
   ]

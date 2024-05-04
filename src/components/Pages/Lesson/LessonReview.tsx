@@ -10,7 +10,7 @@ export const LessonReview = () => {
 
   return (
     <div
-      className='grid grid-rows-[1fr_140px] h-full'
+      className='grid grid-rows-[1fr_140px] gap-4 h-full'
       style={{
         backgroundColor: '#fbfbfa'
       }}>
