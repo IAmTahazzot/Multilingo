@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { User } from '@prisma/client'
+import { User, UserPreferences } from '@prisma/client'
 
 /**
  * This function deducts a heart from a user's total heart count.
@@ -169,4 +169,43 @@ export const updateQuestionCount = async (lessonProgressId: string, questionCoun
   })
 
   return newProgress
+}
+
+/**
+ * This function updates a user's profile information.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ * @param {object} profile - The profile information to update.
+ *
+ * @returns {Promise<object>} The updated user object if the operation is successful.
+ *
+ * @throws {Error} If the user is not found in the database.
+ */
+export const updateUserPreferences = async (
+  userId: string,
+  preferences: {
+    sound?: boolean
+  }
+): Promise<UserPreferences> => {
+  const previousPreferences = await db.userPreferences.findUnique({
+    where: {
+      userId
+    }
+  })
+
+  if (!previousPreferences) {
+    throw new Error('User preferences not found')
+  }
+
+  const updatedPreferences = await db.userPreferences.update({
+    where: {
+      userId
+    },
+    data: {
+      ...previousPreferences,
+      sound: preferences.sound ?? previousPreferences.sound
+    }
+  })
+
+  return updatedPreferences
 }

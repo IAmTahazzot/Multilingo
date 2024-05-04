@@ -1,4 +1,4 @@
-import { Course, Lesson, Option, Question, Section, Unit, User } from '@prisma/client'
+import { Course, Lesson, Option, Question, Section, Unit, User, UserPreferences } from '@prisma/client'
 import { create } from 'zustand'
 import { mountStoreDevtool } from 'simple-zustand-devtools'
 
@@ -23,6 +23,9 @@ type GlobalState = {
     lessonId: number
     questionCount: number
   }
+  userPreferences: {
+    sound: boolean
+  }
   requestedLesson: {
     sectionId: string
     unitId: string
@@ -33,6 +36,7 @@ type GlobalState = {
   setUser: (user: User) => void
   setEnrollmentDetails: (details: GlobalState['enrollmentDetails']) => void
   setRequestedLesson: (details: GlobalState['requestedLesson']) => void
+  setUserPreferences: (preferences: { sound: boolean }) => void
 }
 
 export const useGlobalState = create<GlobalState>(set => ({
@@ -46,6 +50,9 @@ export const useGlobalState = create<GlobalState>(set => ({
     lessonId: 0,
     questionCount: 0
   },
+  userPreferences: {
+    sound: true
+  },
   requestedLesson: {
     sectionId: '',
     unitId: '',
@@ -55,7 +62,11 @@ export const useGlobalState = create<GlobalState>(set => ({
   setAllCourses: courses => set({ allCourses: courses }),
   setUser: user => set({ user }),
   setEnrollmentDetails: details => set({ enrollmentDetails: details }),
-  setRequestedLesson: details => set({ requestedLesson: details })
+  setRequestedLesson: details => set({ requestedLesson: details }),
+  setUserPreferences: (preferences: { sound: boolean }) =>
+    set({
+      userPreferences: preferences
+    })
 }))
 
 // TODO: remove this line in production

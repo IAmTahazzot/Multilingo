@@ -3497,6 +3497,9 @@
       }
     ]
   },
+  "userPreferences": {
+    "sound": true
+  },
   "allCourses": [
     {
       "id": "clv7kjiba0000z0o8sx36vrmj",

@@ -29,5 +29,12 @@ export const setupUser = async () => {
     }
   })
 
+  await db.userPreferences.create({
+    data: {
+      userId: newUser.id,
+      sound: true
+    }
+  })
+
   return newUser
 }

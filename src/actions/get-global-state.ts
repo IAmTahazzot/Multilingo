@@ -12,10 +12,14 @@ type GlobalState = {
   allCourses: CourseState[]
   user: User | null
   enrollmentDetails: {
+    lessonProgressId: string
     sectionId: string
     unitId: string
     lessonId: number
     questionCount: number
+  }
+  userPreferences: {
+    sound: boolean
   }
 }
 
@@ -153,10 +157,20 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
   // 5. get All courses
   const userCourses = await getUserEnrolledCourses(getUser.id)
 
+  // 6. user preferences
+  const preferences = await db.userPreferences.findUnique({
+    where: {
+      userId: getUser.id
+    }
+  })
+
   const data: GlobalState = {
     user: getUser,
     course,
-    allCourses: userCourses.map(enrollment => enrollment.course),
+    userPreferences: {
+      sound: preferences?.sound || true
+    },
+    allCourses: userCourses.map(enrollment => enrollment.course as CourseState),
     enrollmentDetails: {
       lessonProgressId: getCourseProgress?.id || '',
       sectionId: getCourseProgress?.sectionId || course.Section[0].id,
@@ -167,8 +181,7 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
   }
 
   // add to data.json file
- fs.writeFileSync('data.json', JSON.stringify(data, null, 2))
-
+  fs.writeFileSync('data.json', JSON.stringify(data, null, 2))
 
   return data
 }
