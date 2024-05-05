@@ -28,7 +28,7 @@ export default function SectionsListPage() {
   }, [course, enrollmentDetails])
 
   if (!mounted) {
-    return '...'
+    return null
   }
 
   // TODO: Implement for completed sections

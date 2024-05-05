@@ -13,11 +13,6 @@ import { LessonTable } from './DataTable/LessonTable'
 import { QuestionTable } from './DataTable/QuestionTable'
 import { SelectLesson } from './SelectLesson'
 
-// TODO: Implement CreateLesson component
-// 1. Dynamic state management
-// 2. Use dropdown to select sections, units, and lessons
-// 3. Use modal to create new sections, units, and lessons
-// 4. Display in a table
 export const CreateLesson = () => {
   const [state, setState] = useState<State>({
     course: {
