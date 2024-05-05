@@ -15,7 +15,7 @@ export const UserNavigation = () => {
   const path = usePathname()
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-3'>
       {UserNavigationList.map(link => (
         <Button
           key={link.href}
