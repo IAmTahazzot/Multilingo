@@ -7,11 +7,12 @@ import { MultipleChoiceImage } from './QuestionTypes/MultipleChoiceImage'
 import { MultipleChoice } from './QuestionTypes/MultipleChoice'
 import { cn } from '@/lib/utils'
 import { complimentMessages } from '@/lib/complimentMessages'
-import { deductHeart, updateProgress, updateQuestionCount } from '@/actions/global'
+import { deductHeart, updateProgress, updateQuestionCount, updateUserXp } from '@/actions/global'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { LessonReview } from './LessonReview'
 import { TrueFalseOptions } from './QuestionTypes/TrueFalse'
+import { XP_PER_QUESTION } from '@/lib/constants'
 
 export const LessonContent = () => {
   const { user, course, enrollmentDetails, setEnrollmentDetails, setUser, requestedLesson } = useGlobalState()
@@ -197,12 +198,34 @@ export const LessonContent = () => {
     }
   }
 
+  const updateXp = async () => {
+    try {
+      const correctedQuestions = questions.length - wrongAnswers.length
+      const updatedUser = await updateUserXp(user.id, correctedQuestions * XP_PER_QUESTION)
+
+      if (updatedUser) {
+        setUser(updatedUser)
+      }
+    } catch (error) {
+      return toast.error('Failed to update user data. Please try again.')
+    } finally {
+      // reset the state as it's the last update
+      setCurrentQuestionIndex(0)
+      setAnswer('')
+      setIsChecked(false)
+      setSelectedDOM(null)
+      setLessonProgressPercentage(0)
+      setWrongAnswers([])
+    }
+  }
+
   const checkAnswer = async () => {
     if (isChecked) {
-      // check if there are more questions
+      // check if there are no more questions
       if (currentQuestionIndex + 1 === questions.length) {
         setLessonCompleted(true)
         updateLessonProgress()
+        updateXp()
         return
       }
 

@@ -209,3 +209,26 @@ export const updateUserPreferences = async (
 
   return updatedPreferences
 }
+
+export const updateUserXp = async (userId: string, xp: number) => {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId
+    }
+  })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  const updatedUser = await db.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      xp: user.xp + xp
+    }
+  })
+
+  return updatedUser
+}
