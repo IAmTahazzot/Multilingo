@@ -6,15 +6,15 @@
     "name": "Tahazzot",
     "password": null,
     "imageUrl": null,
-    "xp": 5056,
-    "hearts": 87,
+    "xp": 5136,
+    "hearts": 80,
     "streak": 0,
     "dimond": 300,
     "role": "ADMIN",
     "tier": "PREMIUM",
     "tierExpiration": null,
     "createdAt": "2024-04-20T03:55:40.844Z",
-    "updatedAt": "2024-05-05T00:52:34.492Z"
+    "updatedAt": "2024-05-05T06:20:15.637Z"
   },
   "course": {
     "id": "clv7kjiba0000z0o8sx36vrmj",
@@ -6995,7 +6995,7 @@
     "lessonProgressId": "clvstlkei0001huj5rsf7ihtz",
     "sectionId": "clv7m474q0002z0o81pqhvirt",
     "unitId": "clv7m4ylh0004z0o8vc7hbff0",
-    "lessonId": 1,
+    "lessonId": 3,
     "questionCount": 0
   }
 }

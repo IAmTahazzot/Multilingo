@@ -151,7 +151,7 @@ export const ProgressBoard = () => {
   return (
     <section>
       <div className='lg:p-2'></div>
-      <div className='sticky top-0 z-20'>
+      <div className='sticky top-0 z-50'>
         <div className='bg-white h-4'></div>
         <Card theme={activeUnit.theme}>
           <h2 className='flex items-center gap-2 font-display text-[rgba(255,255,255,.7)] uppercase text-[15px] md:text-base'>

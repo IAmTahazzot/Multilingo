@@ -5,7 +5,12 @@ import Image from 'next/image'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 
-export const LessonReview = () => {
+type LessonReviewProps = {
+  xp: number
+  accuracy: number
+}
+
+export const LessonReview = ({ xp, accuracy }: LessonReviewProps) => {
   const { width, height } = useWindowSize()
 
   return (
@@ -48,13 +53,19 @@ export const LessonReview = () => {
                     fill='#FFEF8F'
                   />
                 </svg>
-                <span className='text-bee-default font-display text-xl'>12</span>
+                <span className='text-bee-default font-display text-xl'>{xp}</span>
               </div>
             </div>
 
             <div className='relative w-[160px]'>
               <div className='absolute h-full w-full bg-primary-default rounded-2xl z-10'></div>
-              <div className='text-white font-body uppercase p-1 text-xs font-bold text-center z-20 relative'>Good</div>
+              <div className='text-white font-body uppercase p-1 text-xs font-bold text-center z-20 relative'>
+                {
+                  ['Perfect', 'Great', 'Good', 'Try Again'][
+                    accuracy > 90 ? 0 : accuracy > 80 ? 1 : accuracy > 70 ? 2 : 3
+                  ]
+                }
+              </div>
               <div className='flex justify-center items-center gap-2 h-[70px] bg-white border-[2px] border-primary-default rounded-2xl z-20 relative'>
                 <svg width='28' height='25' viewBox='0 0 28 25' fill='none' xmlns='http://www.w3.org/2000/svg'>
                   <circle cx='11.97' cy='13.1049' r='10.2515' fill='#ECFFDE' stroke='#58CC02' strokeWidth='2.56286' />
@@ -81,7 +92,7 @@ export const LessonReview = () => {
                     fill='#478700'
                   />
                 </svg>
-                <span className='text-primary-default font-display text-xl'>84%</span>
+                <span className='text-primary-default font-display text-xl'>{accuracy}%</span>
               </div>
             </div>
           </div>

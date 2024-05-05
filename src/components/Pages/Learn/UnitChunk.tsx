@@ -118,13 +118,34 @@ export const UnitChunk = ({ unit, defaultUnitLessonProgressDirection, index, act
               isActive={isCurrent}
               activeFillPercentage={lessonProgressPercentage}
               lessonBeginDescription={
-                <div>
-                  <span>
-                    Unit: {unitIndex + 1}, Lesson: {lesson.id}
-                  </span>
-                  <br />
-                  <span>You&apos;ll get 20 XP</span>
-                </div>
+                variant === 'disabled' ? (
+                  <div>
+                    <div className='flex gap-2'>
+                      <span>
+                        <svg width='13' height='16' viewBox='0 0 13 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                          <rect x='0.849609' y='6.18652' width='11.4073' height='9.40015' rx='1.81676' fill='#AFAFAF' />
+                          <path
+                            d='M3.75 6.05652L3.75 4.75777C3.75 3.20996 5.00475 1.95521 6.55257 1.95521V1.95521C8.10039 1.95521 9.35514 3.20996 9.35514 4.75778V9.12953'
+                            stroke='#AFAFAF'
+                            strokeWidth='2.09735'
+                            strokeLinecap='round'
+                          />
+                        </svg>
+                      </span>
+                      <span>
+                        Unit: {unitIndex + 1}, Lesson: {lesson.id}{' '}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <span>
+                      Unit: {unitIndex + 1}, Lesson: {lesson.id}
+                    </span>
+                    <br />
+                    <span>You&apos;ll get 20 XP</span>
+                  </div>
+                )
               }
               requestedLesson={{
                 unitId: unit.id,

@@ -33,7 +33,6 @@ export const LessonContent = () => {
    * 4. update enroll progress at the end of the lesson
    */
   const questions = useMemo(() => {
-    console.log('holy f question is being called')
     const questionCompleted = enrollmentDetails.questionCount
 
     // if requested lesson found
@@ -153,8 +152,8 @@ export const LessonContent = () => {
         const nextProgressData = getNextProgress()
 
         if (!nextProgressData) {
-          // course is completed
-          return console.log('wtf, course is completed')
+          // TODO: course is completed do something
+          return
         }
 
         const { sectionId, unitId, lessonId } = nextProgressData
@@ -183,7 +182,11 @@ export const LessonContent = () => {
       }
     }
 
-    // lesson is not completed, update question count only
+    // lesson is not completed, update question count only be sure to check it's the correct lesson progress id
+    if (requestedLesson.lessonId !== enrollmentDetails.lessonId) {
+      return
+    }
+
     try {
       const afterQuestionCountUpdated = await updateQuestionCount(enrollmentDetails.lessonProgressId, newQuestionCount)
 
@@ -208,14 +211,6 @@ export const LessonContent = () => {
       }
     } catch (error) {
       return toast.error('Failed to update user data. Please try again.')
-    } finally {
-      // reset the state as it's the last update
-      setCurrentQuestionIndex(0)
-      setAnswer('')
-      setIsChecked(false)
-      setSelectedDOM(null)
-      setLessonProgressPercentage(0)
-      setWrongAnswers([])
     }
   }
 
@@ -223,9 +218,9 @@ export const LessonContent = () => {
     if (isChecked) {
       // check if there are no more questions
       if (currentQuestionIndex + 1 === questions.length) {
+        await updateLessonProgress()
+        await updateXp()
         setLessonCompleted(true)
-        updateLessonProgress()
-        updateXp()
         return
       }
 
@@ -359,7 +354,13 @@ export const LessonContent = () => {
         : 'danger'
 
   if (lessonCompleted) {
-    return <LessonReview />
+    const correctedQuestions = questions.length - wrongAnswers.length
+    return (
+      <LessonReview
+        accuracy={Math.floor((correctedQuestions / questions.length) * 100)}
+        xp={correctedQuestions * XP_PER_QUESTION}
+      />
+    )
   }
 
   return (
@@ -408,7 +409,7 @@ export const LessonContent = () => {
       </header>
 
       <main className='w-full self-center'>
-        <LessonContentContainer className='mx-6 md:mx-auto max-w-3xl'>
+        <LessonContentContainer className='mx-6 md:mx-auto max-w-3xl xl:max-w-3xl'>
           <h1 className='font-display text-[36px] pl-1 mb-14'>{question.title}</h1>
 
           {/* BEGIN: QUESTION OPTIONS USING THEIR OWN TYPE */}

@@ -235,25 +235,27 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
   )
 
   const lessonBeginButton = (
-    <div className='absolute left-1/2 top-[162%] -translate-x-1/2 w-[300px] z-10' id='lessonBeginButton'>
+    <div className={cn('absolute left-1/2 top-[162%] -translate-x-1/2 w-[300px] z-40')} id='lessonBeginButton'>
       <Card theme={variant} className='w-full anim-pop' onClick={e => e.stopPropagation()}>
         <div className='space-y-4'>
           <span className='font-display text-basetext-white'>{lessonBeginDescription}</span>
-          <Button
-            theme={'white'}
-            className='w-full'
-            style={{
-              color: variant === 'disabled' ? '#999' : 'var(--color-' + variant + ')'
-            }}
-            onClick={() => {
-              setRequestedLesson({
-                ...prevRequestedLesson,
-                ...requestedLesson
-              })
-              router.push('/lesson')
-            }}>
-            Begin
-          </Button>
+          {variant !== 'disabled' && (
+            <Button
+              theme={'white'}
+              className='w-full'
+              style={{
+                color: 'var(--color-' + variant + ')'
+              }}
+              onClick={() => {
+                setRequestedLesson({
+                  ...prevRequestedLesson,
+                  ...requestedLesson
+                })
+                router.push('/lesson')
+              }}>
+              Begin
+            </Button>
+          )}
         </div>
 
         <div
@@ -279,13 +281,14 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
           {progressCircle}
         </div>
       )}
-      <button
+      <div
         onClick={e => {
           e.stopPropagation()
 
-          if (!isActive) {
-            return
-          }
+          // hide others popups
+          document.querySelectorAll('#lessonBeginButton').forEach(el => {
+            ;(el as HTMLElement).style.display = 'none'
+          })
 
           setShowLessonBeginButton(prev => !prev)
         }}
@@ -295,8 +298,11 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
         {...props}>
         <span className='text-white opacity-20 absolute'>{icon === 'check' && ActiveIconGlamorous}</span>
         <span className='z-[5]'>{Icons[icon](null, null, disabled ? '#afafaf' : '#fff')}</span>
+      </div>
+
+      <div style={style} className='absolute top-8'>
         {showLessonBeginButton && lessonBeginButton}
-      </button>
+      </div>
     </div>
   )
 }
