@@ -13,8 +13,12 @@ import Link from 'next/link'
 import { LessonReview } from './LessonReview'
 import { TrueFalseOptions } from './QuestionTypes/TrueFalse'
 import { XP_PER_QUESTION } from '@/lib/constants'
+import useSound from 'use-sound'
 
 export const LessonContent = () => {
+  const [playOnSuccess] = useSound('/sounds/success.mp3')
+  const [playOnFail] = useSound('/sounds/fail.mp3')
+  const [playOnComplete] = useSound('/sounds/complete.mp3')
   const { user, course, enrollmentDetails, setEnrollmentDetails, setUser, requestedLesson } = useGlobalState()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answer, setAnswer] = useState<string>('') // option id
@@ -24,14 +28,6 @@ export const LessonContent = () => {
   const [lessonCompleted, setLessonCompleted] = useState<boolean>(false)
   const [wrongAnswers, setWrongAnswers] = useState<{}[]>([])
 
-  /**
-   * # STEPS
-   *
-   * 1. show requested lesson (don't add xp or update enrollment progress if lesson is already completed)
-   * 2. if not requested, show enrollment progress lesson
-   * 3. show only 5 questions at a time
-   * 4. update enroll progress at the end of the lesson
-   */
   const questions = useMemo(() => {
     const questionCompleted = enrollmentDetails.questionCount
 
@@ -221,6 +217,7 @@ export const LessonContent = () => {
         await updateLessonProgress()
         await updateXp()
         setLessonCompleted(true)
+        playOnComplete()
         return
       }
 
@@ -234,6 +231,8 @@ export const LessonContent = () => {
     // answer is the option id
     if (answer === correctOption?.id) {
       // correct
+      playOnSuccess()
+
       selectedDOM?.classList.remove(
         'border-sky-500',
         'bg-sky-100',
@@ -244,6 +243,7 @@ export const LessonContent = () => {
       selectedDOM?.classList.add('border-[#a5ed6e]', 'bg-[#d7ffb8]', 'hover:bg-[#d7ffb8]')
     } else {
       // wrong
+      playOnFail()
 
       // add wrong answer to the list
       setWrongAnswers(prev => [...prev, question])

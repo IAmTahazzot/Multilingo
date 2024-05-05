@@ -2,9 +2,9 @@
 
 - User XP update
 - Show data in review page
+- Completed lesson should be accessible
 - Sound effects
 - Switch courses
-- Completed lesson should be accessible
 
 - error handling
 - Code cleanup
