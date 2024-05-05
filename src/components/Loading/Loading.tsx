@@ -2,8 +2,19 @@
 
 import { LoadingMessages } from '@/lib/loadingMessage'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 export const Loading = () => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
   return (
     <div className='h-screen flex items-center justify-center'>
       <div className='max-w-[400px] space-y-4'>

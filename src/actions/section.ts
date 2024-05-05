@@ -1,6 +1,6 @@
-'use server';
+'use server'
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db'
 import { languages } from '@/lib/countries'
 
 export const getSectionsById = async (sectionId: string) => {
@@ -13,8 +13,7 @@ export const getSectionsById = async (sectionId: string) => {
   return sections
 }
 
-export const updateSection = async (sectionId: string, sectionName: string, sectionDescription: string) => {
-
+export const updateSection = async (sectionId: string, sectionName: string, sectionDescription: string, sectionIntro: string) => {
   if (!sectionId) {
     throw new Error('Section ID is required')
   }
@@ -29,7 +28,8 @@ export const updateSection = async (sectionId: string, sectionName: string, sect
     },
     data: {
       title: sectionName,
-      description: sectionDescription
+      description: sectionDescription,
+      sectionIntro: sectionIntro
     }
   })
 
@@ -46,11 +46,17 @@ export const deleteSection = async (sectionId: string) => {
   return deletedSection
 }
 
-export const createSection = async (sectionName: string, sectionDescription: string, courseId: string) => {
+export const createSection = async (
+  sectionName: string,
+  sectionDescription: string,
+  sectionIntro: string,
+  courseId: string
+) => {
   const newSection = await db.section.create({
     data: {
       title: sectionName,
       description: sectionDescription,
+      sectionIntro: sectionIntro,
       courseId: courseId
     }
   })

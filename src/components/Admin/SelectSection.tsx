@@ -29,7 +29,13 @@ export const SelectSection = ({ state, setState }: LessonStateProps) => {
       onValueChange={(value: string) => {
         onSectionSelect(value)
       }}>
-      <SelectTrigger className='w-full'>
+      <SelectTrigger
+        className='w-full'
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap'
+        }}>
         <SelectValue placeholder='Select a section' />
       </SelectTrigger>
       <SelectContent>

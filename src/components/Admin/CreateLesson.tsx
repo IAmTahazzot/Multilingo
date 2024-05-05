@@ -45,7 +45,7 @@ export const CreateLesson = () => {
           ...state,
           course: {
             list: response || [],
-            selectedCourseId: response[0].id || ''
+            selectedCourseId: response[0]?.id || ''
           }
         })
       } catch (error) {
@@ -90,11 +90,8 @@ export const CreateLesson = () => {
       </div>
 
       {state.activeTab === 'section' && <SectionTable state={state} setState={setState} />}
-
       {state.activeTab === 'unit' && <UnitTable state={state} setState={setState} />}
-
       {state.activeTab === 'lesson' && <LessonTable state={state} setState={setState} />}
-
       {state.activeTab === 'question' && <QuestionTable state={state} setState={setState} />}
     </div>
   )

@@ -73,12 +73,24 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
                     Question: {
                       include: {
                         Option: true
+                      },
+                      orderBy: {
+                        createdAt: 'asc'
                       }
                     }
+                  },
+                  orderBy: {
+                    id: 'asc'
                   }
                 }
+              },
+              orderBy: {
+                createdAt: 'asc'
               }
             }
+          },
+          orderBy: {
+            createdAt: 'asc'
           }
         }
       }
@@ -116,12 +128,24 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
                     Question: {
                       include: {
                         Option: true
+                      },
+                      orderBy: {
+                        createdAt: 'asc'
                       }
                     }
+                  },
+                  orderBy: {
+                    id: 'asc'
                   }
                 }
+              },
+              orderBy: {
+                createdAt: 'asc'
               }
             }
+          },
+          orderBy: {
+            createdAt: 'asc'
           }
         }
       }

@@ -6,6 +6,9 @@ export const getLessons = async (unitId: string) => {
   const lessons = await db.lesson.findMany({
     where: {
       unitId: unitId
+    },
+    orderBy: {
+      id: 'asc'
     }
   })
 

@@ -182,7 +182,7 @@ export const ProgressBoard = () => {
         )
       })}
 
-      <div className='space h-32'></div>
+      <div className='space h-[50vh]'></div>
     </section>
   )
 }

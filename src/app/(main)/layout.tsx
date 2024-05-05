@@ -13,7 +13,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     const gettingUser = async () => {
       // Create new user if user does not exist in the database
       // NOTE: webhook would be a better solution for this (but it's not implemented yet)
-      await setupUser()
+      try {
+        await setupUser()
+      } catch (error) {
+        toast.error('Unable to setup user account!')
+      }
     }
 
     const gettingGlobalState = async () => {

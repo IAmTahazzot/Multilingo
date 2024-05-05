@@ -1,13 +1,13 @@
 # TODO
 
-- User XP update
-- Show data in review page
-- Completed lesson should be accessible
-- Sound effects
+done - User XP update
+done - Show data in review page
+done - Completed lesson should be accessible
+done - Sound effects
 - Switch courses
 
-- error handling
-- Code cleanup
+done - error handling
+done - Code cleanup
 - Unit testing
 - Containarize
 - Deploy

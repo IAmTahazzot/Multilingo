@@ -16,6 +16,10 @@ type SectionProps = {} & LessonStateProps
 
 const SectionFormSchema = z.object({
   sectionName: z.string().min(12, { message: 'Section name must be at least 12 characters' }),
+  sectionIntro: z
+    .string()
+    .min(3, { message: 'Section description must be at least 3 characters' })
+    .max(50, { message: 'Section description must be at most 50 characters' }),
   sectionDescription: z.string()
 })
 
@@ -24,6 +28,7 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
     resolver: zodResolver(SectionFormSchema),
     defaultValues: {
       sectionName: '',
+      sectionIntro: '',
       sectionDescription: ''
     }
   })
@@ -35,7 +40,12 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
     }
 
     try {
-      const newSection = await createSection(data.sectionName, data.sectionDescription, state.course.selectedCourseId)
+      const newSection = await createSection(
+        data.sectionName,
+        data.sectionDescription,
+        data.sectionIntro,
+        state.course.selectedCourseId
+      )
 
       if (!newSection) {
         toast.error('Failed to create new section')
@@ -53,7 +63,7 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
         }
       }))
     } catch (error) {
-      console.error(error)
+      toast.error('Failed to create new section')
     }
   }
 
@@ -101,6 +111,14 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
                   </FormLabel>
                   <Input id='sectionName' {...form.register('sectionName')} />
                   <FormMessage>{form.formState.errors.sectionName?.message}</FormMessage>
+                </FormItem>
+
+                <FormItem>
+                  <FormLabel htmlFor='sectionDescription' className='block'>
+                    Section Intro
+                  </FormLabel>
+                  <Textarea id='sectionDescription' {...form.register('sectionIntro')} />
+                  <FormMessage>{form.formState.errors.sectionIntro?.message}</FormMessage>
                 </FormItem>
 
                 <FormItem>
@@ -175,6 +193,7 @@ const EditSection = ({ sectionId, state, setState }: SectionProps & { sectionId:
   if (!section) {
     section = {
       title: '',
+      sectionIntro: '',
       description: ''
     }
   }
@@ -182,14 +201,15 @@ const EditSection = ({ sectionId, state, setState }: SectionProps & { sectionId:
   const form = useForm({
     resolver: zodResolver(SectionFormSchema),
     defaultValues: {
-      sectionName: section.title || '',
-      sectionDescription: section.description || ''
+      sectionName: section?.title || '',
+      sectionIntro: section?.sectionIntro || '',
+      sectionDescription: section?.description || ''
     }
   })
 
   const handleUpdate = async (data: z.infer<typeof SectionFormSchema>) => {
     try {
-      const updatedSection = await updateSection(sectionId, data.sectionName, data.sectionDescription)
+      const updatedSection = await updateSection(sectionId, data.sectionName, data.sectionDescription, data.sectionIntro)
 
       if (!updatedSection) {
         return toast.error('Failed to update section')
@@ -239,6 +259,14 @@ const EditSection = ({ sectionId, state, setState }: SectionProps & { sectionId:
                 </FormLabel>
                 <Input id='sectionName' {...form.register('sectionName')} />
                 <FormMessage>{form.formState.errors.sectionName?.message}</FormMessage>
+              </FormItem>
+
+              <FormItem>
+                <FormLabel htmlFor='sectionDescription' className='block'>
+                  Section Intro
+                </FormLabel>
+                <Textarea id='sectionDescription' {...form.register('sectionIntro')} />
+                <FormMessage>{form.formState.errors.sectionIntro?.message}</FormMessage>
               </FormItem>
 
               <FormItem>

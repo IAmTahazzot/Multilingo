@@ -101,13 +101,22 @@ export const getUserEnrolledCourses = async (userId: string, onlyCourse?: boolea
                           Option: true
                         }
                       }
+                    },
+                    orderBy: {
+                      id: 'asc'
                     }
                   }
+                },
+                orderBy: {
+                  createdAt: 'asc'
                 }
               }
+            },
+            orderBy: {
+              createdAt: 'asc'
             }
           }
-        }
+        },
       }
     }
   })

@@ -49,6 +49,7 @@ export const updateQuestion = async (
         }
 
         // Assuming that the options are in the same order as they were created
+        // [CAUTION]: This is a workaround because Prisma does not support updateMany for nested relations
         const options = [data.option1, data.option2, data.option3]
         const answers = [data.answer === '1', data.answer === '2', data.answer === '3']
 
@@ -79,6 +80,7 @@ export const updateQuestion = async (
         })
 
         return updatedMultipleChoiceQuestion
+
       case 'MULTIPLE_CHOICE_IMAGE':
         if (
           !data.option4 ||
@@ -91,6 +93,24 @@ export const updateQuestion = async (
           throw new Error('Image and all options are required')
         }
 
+        // Assuming that the options are in the same order as they were created
+        // [CAUTION]: This is a workaround because Prisma does not support updateMany for nested relations
+        const optionsForImages = [data.option4, data.option5, data.option6]
+        const answersForImages = [data.answer === '4', data.answer === '5', data.answer === '6']
+
+        for (let i = 0; i < optionsForImages.length; i++) {
+          await db.option.update({
+            where: {
+              id: data.prevQuestion.Option[i].id
+            },
+            data: {
+              title: optionsForImages[i],
+              isCorrect: answersForImages[i],
+              imageUrl: i === 0 ? data.option1_image : i === 1 ? data.option2_image : data.option3_image
+            }
+          })
+        }
+
         const updatedMultipleChoiceImageQuestion = await db.question.update({
           where: {
             id: data.prevQuestion.id
@@ -98,31 +118,7 @@ export const updateQuestion = async (
           data: {
             type: data.type,
             title: data.question,
-            lessonId: data.prevQuestion.lessonId,
-            Option: {
-              updateMany: {
-                where: {
-                  questionId: data.prevQuestion.id
-                },
-                data: [
-                  {
-                    title: data.option4,
-                    isCorrect: data.answer === '4',
-                    imageUrl: data.option1_image
-                  },
-                  {
-                    title: data.option5,
-                    isCorrect: data.answer === '5',
-                    imageUrl: data.option2_image
-                  },
-                  {
-                    title: data.option6,
-                    isCorrect: data.answer === '6',
-                    imageUrl: data.option3_image
-                  }
-                ]
-              }
-            }
+            lessonId: data.prevQuestion.lessonId
           },
           include: {
             Option: true
@@ -150,6 +146,8 @@ export const updateQuestion = async (
           throw new Error('Answer is required')
         }
 
+        const ans = data.answer.toLocaleLowerCase() === 'true'
+
         const updatedTrueFalseQuestion = await db.question.update({
           where: {
             id: data.prevQuestion.id
@@ -162,8 +160,8 @@ export const updateQuestion = async (
                   id: data.prevQuestion.Option[0].id
                 },
                 data: {
-                  title: data.answer.toUpperCase(), // for true false question, we only need one option and the title is the answer
-                  isCorrect: true // optional but we can set it to true since there's only one option
+                  title: data.answer.toUpperCase(),
+                  isCorrect: ans
                 }
               }
             }
@@ -178,6 +176,7 @@ export const updateQuestion = async (
         throw new Error('Invalid question type')
     }
   } catch (error) {
+    console.log(error)
     throw new Error('Something is terribly wrong while updating!')
   }
 }
@@ -262,17 +261,17 @@ export const createQuestion = async (
                   {
                     title: data.option4,
                     isCorrect: data.answer === '4',
-                    imageUrl: data.option3_image
+                    imageUrl: data.option1_image
                   },
                   {
                     title: data.option5,
                     isCorrect: data.answer === '5',
-                    imageUrl: data.option1_image
+                    imageUrl: data.option2_image
                   },
                   {
                     title: data.option6,
                     isCorrect: data.answer === '6',
-                    imageUrl: data.option2_image
+                    imageUrl: data.option3_image
                   }
                 ]
               }
@@ -302,6 +301,8 @@ export const createQuestion = async (
           throw new Error('Answer is required')
         }
 
+        const ans = data.answer.toLocaleLowerCase() === 'true'
+
         const trueFalseQuestion = await db.question.create({
           data: {
             type: data.type,
@@ -309,8 +310,8 @@ export const createQuestion = async (
             lessonId: data.lessonId,
             Option: {
               create: {
-                title: data.answer.toUpperCase(), // for true false question, we only need one option and the title is the answer
-                isCorrect: true // optional but we can set it to true since there's only one option
+                title: data.answer.toUpperCase(),
+                isCorrect: ans
               }
             }
           },
