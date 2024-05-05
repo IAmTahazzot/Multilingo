@@ -1,15 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
-import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { LessonStateProps } from '@/lib/types'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-import { createLesson, deleteLesson, getLessonById, getLessons } from '@/actions/lesson'
+import { createLesson, deleteLesson } from '@/actions/lesson'
 import { toast } from 'sonner'
-import { useEffect } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 type LessonProps = {} & LessonStateProps
@@ -58,7 +50,6 @@ export const LessonTable = ({ state, setState }: LessonProps) => {
           list: prevState.lesson.list.filter(lesson => lesson.id !== lessonId)
         }
       }))
-
     } catch (error) {
       const errorMessage = (error as Error).message || 'An error occurred while deleting the lesson'
       toast.error('Error', {

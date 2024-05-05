@@ -1,29 +1,22 @@
 import React from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { LessonStateProps } from '@/lib/types'
 import { getUnits } from '@/actions/unit'
 
 export const SelectSection = ({ state, setState }: LessonStateProps) => {
   const onSectionSelect = async (value: string) => {
-
-    const getSections = await getUnits(value);
+    const getSections = await getUnits(value)
 
     setState(prev => {
       return {
         ...prev,
         section: {
           list: prev.section.list,
-          selectedSectionId: value,
+          selectedSectionId: value
         },
         unit: {
           selectedUnitId: null,
-          list: getSections || [],
+          list: getSections || []
         },
         activeTab: 'unit'
       }
@@ -41,10 +34,7 @@ export const SelectSection = ({ state, setState }: LessonStateProps) => {
       </SelectTrigger>
       <SelectContent>
         {state.section.list.map(section => (
-          <SelectItem
-            value={section.id}
-            key={section.id}
-            className='cursor-pointer'>
+          <SelectItem value={section.id} key={section.id} className='cursor-pointer'>
             <div className='flex items-center gap-x-2 py-3'>
               <span>{section.title}</span>
             </div>

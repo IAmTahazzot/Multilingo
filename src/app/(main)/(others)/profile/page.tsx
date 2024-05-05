@@ -17,7 +17,6 @@ export default function Profile() {
   const { user, isLoaded } = useUser()
   const { user: userDataFromDatabase, allCourses } = useGlobalState()
 
-  console.log(allCourses)
   useEffect(() => {
     if (!userDataFromDatabase) return
 

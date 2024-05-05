@@ -26,10 +26,8 @@ import { deleteQuestion } from '@/actions/question'
 type questionProps = {} & LessonStateProps
 
 export const QuestionTable = ({ state, setState }: questionProps) => {
-
   const delQuestion = async (id: string) => {
     try {
-
       const res = await deleteQuestion(id)
 
       if (!res) {
@@ -106,7 +104,6 @@ export const QuestionTable = ({ state, setState }: questionProps) => {
                           action: {
                             label: 'Yes',
                             onClick: () => {
-                              console.log('deleting...')
                               delQuestion(q.id)
                             }
                           }

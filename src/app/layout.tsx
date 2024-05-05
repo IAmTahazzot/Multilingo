@@ -1,10 +1,10 @@
-import type { Metadata } from 'next'
 import './globals.css'
-import { displayFont, bodyFont } from '@/lib/fonts'
+import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from 'sonner'
-import { cn } from '@/lib/utils'
 import { NetworkProvider } from '@/providers/NetworkProvider'
+import { displayFont, bodyFont } from '@/lib/fonts'
+import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Multilingo: Language Learning Platform',

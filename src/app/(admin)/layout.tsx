@@ -9,6 +9,7 @@ import { User } from '@prisma/client'
 import { BookCheck, Languages } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 const Navigation = [
   {
@@ -25,11 +26,7 @@ const Navigation = [
 
 // admin security can be improved by switching to a server-side check/ component
 // but for now, this is good enough for the demo
-export default function AdminLayout({
-  children
-}: {
-  children: React.ReactNode
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   const path = usePathname()
@@ -46,7 +43,7 @@ export default function AdminLayout({
     try {
       getUserData()
     } catch (error) {
-      console.log(error)
+      toast.error('An error occured while fetching user data')
     } finally {
       setIsLoaded(true)
     }
@@ -62,8 +59,7 @@ export default function AdminLayout({
         <Card theme={'danger'}>
           <h1 className='text-xl font-medium font-display'>Access Denied</h1>
           <p className='text-lg font-body'>
-            You are not authorized to view this page, by the way it&apos;s a
-            cool dashboard :)
+            You are not authorized to view this page, by the way it&apos;s a cool dashboard though :)
           </p>
         </Card>
       </div>

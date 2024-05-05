@@ -62,10 +62,7 @@ export const CreateLesson = () => {
 
   useEffect(() => {
     const getSections = async () => {
-      if (
-        !state.course.selectedCourseId ||
-        prevCourseId === state.course.selectedCourseId
-      ) {
+      if (!state.course.selectedCourseId || prevCourseId === state.course.selectedCourseId) {
         return false
       }
 
@@ -97,21 +94,13 @@ export const CreateLesson = () => {
         <SelectLesson state={state} setState={setState} />
       </div>
 
-      {state.activeTab === 'section' && (
-        <SectionTable state={state} setState={setState} />
-      )}
+      {state.activeTab === 'section' && <SectionTable state={state} setState={setState} />}
 
-      {state.activeTab === 'unit' && (
-        <UnitTable state={state} setState={setState} />
-      )}
+      {state.activeTab === 'unit' && <UnitTable state={state} setState={setState} />}
 
-      {state.activeTab === 'lesson' && (
-        <LessonTable state={state} setState={setState} />
-      )}
+      {state.activeTab === 'lesson' && <LessonTable state={state} setState={setState} />}
 
-      {state.activeTab === 'question' && (
-        <QuestionTable state={state} setState={setState} />
-      )}
+      {state.activeTab === 'question' && <QuestionTable state={state} setState={setState} />}
     </div>
   )
 }

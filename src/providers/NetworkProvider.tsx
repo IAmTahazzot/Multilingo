@@ -1,10 +1,6 @@
-import { Network } from "@/components/Network/Network"
+import { Network } from '@/components/Network/Network'
 
-export const NetworkProvider = ({
-  children
-}: {
-  children?: React.ReactNode
-}) => {
+export const NetworkProvider = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div>
       <Network />

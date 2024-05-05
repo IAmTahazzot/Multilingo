@@ -32,13 +32,12 @@ export const Network = () => {
   if (!visible) return null
 
   return (
-    <div className={
-      cn(
+    <div
+      className={cn(
         'fixed top-0 left-0 flex items-center justify-center w-full h-8 text-xs text-white bg-black z-[1000] font-mono anim-fadeIn',
         isOnline ? 'bg-green-500' : 'bg-red-500',
         addFadeOut && 'anim-fadeOut'
-      )
-    }>
+      )}>
       {isOnline ? 'Connected to the internet' : 'You are offline'}
     </div>
   )

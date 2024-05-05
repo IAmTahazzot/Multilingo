@@ -1,7 +1,6 @@
 'use client'
 
 import { checkUserEnrollment, getCourses } from '@/actions/course'
-import { Loading } from '@/components/Loading/Loading'
 import { BaseNavigation } from '@/components/Navigation/BaseNavigation'
 import { SmallDeviceNavigation } from '@/components/Navigation/SmallDeviceNavigation'
 import { UserNavigation } from '@/components/Navigation/UserNavigation'

@@ -1,41 +1,21 @@
 import { Button } from '@/components/ui/button'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { LessonStateProps } from '@/lib/types'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import {
-  createSection,
-  deleteSection,
-  getSectionsById,
-  updateSection
-} from '@/actions/section'
+import { createSection, deleteSection, getSectionsById, updateSection } from '@/actions/section'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 type SectionProps = {} & LessonStateProps
 
 const SectionFormSchema = z.object({
-  sectionName: z
-    .string()
-    .min(12, { message: 'Section name must be at least 12 characters' }),
+  sectionName: z.string().min(12, { message: 'Section name must be at least 12 characters' }),
   sectionDescription: z.string()
 })
 
@@ -55,11 +35,7 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
     }
 
     try {
-      const newSection = await createSection(
-        data.sectionName,
-        data.sectionDescription,
-        state.course.selectedCourseId
-      )
+      const newSection = await createSection(data.sectionName, data.sectionDescription, state.course.selectedCourseId)
 
       if (!newSection) {
         toast.error('Failed to create new section')
@@ -115,38 +91,24 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
         <DrawerContent>
           <div className='min-h-[300px] w-[600px] mx-auto py-10'>
             <h1 className='text-lg font-medium mb-4 font-display'>
-              Section for{' '}
-              {
-                state.course.list.find(
-                  course => course.id === state.course.selectedCourseId
-                )?.name
-              }
+              Section for {state.course.list.find(course => course.id === state.course.selectedCourseId)?.name}
             </h1>
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className='w-full space-y-6'>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full space-y-6'>
                 <FormItem>
                   <FormLabel htmlFor='sectionName' className='block'>
                     Section Name
                   </FormLabel>
                   <Input id='sectionName' {...form.register('sectionName')} />
-                  <FormMessage>
-                    {form.formState.errors.sectionName?.message}
-                  </FormMessage>
+                  <FormMessage>{form.formState.errors.sectionName?.message}</FormMessage>
                 </FormItem>
 
                 <FormItem>
                   <FormLabel htmlFor='sectionDescription' className='block'>
                     Section Description
                   </FormLabel>
-                  <Textarea
-                    id='sectionDescription'
-                    {...form.register('sectionDescription')}
-                  />
-                  <FormMessage>
-                    {form.formState.errors.sectionDescription?.message}
-                  </FormMessage>
+                  <Textarea id='sectionDescription' {...form.register('sectionDescription')} />
+                  <FormMessage>{form.formState.errors.sectionDescription?.message}</FormMessage>
                 </FormItem>
 
                 <Button variant={'default'} size={'lg'} type='submit'>
@@ -180,16 +142,11 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
                   <TableCell>{section.title}</TableCell>
                   <TableCell>{section.description}</TableCell>
                   <TableCell className='flex item-center gap-x-1'>
-                    <EditSection
-                      sectionId={section.id}
-                      state={state}
-                      setState={setState}
-                    />
+                    <EditSection sectionId={section.id} state={state} setState={setState} />
                     <Button
                       onClick={() => {
                         toast.warning('Caution', {
-                          description:
-                            'Are you sure you want to delete this section?',
+                          description: 'Are you sure you want to delete this section?',
                           action: {
                             label: 'Yes',
                             onClick: () => handleDeleteSection(section.id)
@@ -212,11 +169,7 @@ export const SectionTable = ({ state, setState }: SectionProps) => {
   )
 }
 
-const EditSection = ({
-  sectionId,
-  state,
-  setState
-}: SectionProps & { sectionId: string }) => {
+const EditSection = ({ sectionId, state, setState }: SectionProps & { sectionId: string }) => {
   let section = state.section.list.find(section => section.id === sectionId)
 
   if (!section) {
@@ -236,11 +189,7 @@ const EditSection = ({
 
   const handleUpdate = async (data: z.infer<typeof SectionFormSchema>) => {
     try {
-      const updatedSection = await updateSection(
-        sectionId,
-        data.sectionName,
-        data.sectionDescription
-      )
+      const updatedSection = await updateSection(sectionId, data.sectionName, data.sectionDescription)
 
       if (!updatedSection) {
         return toast.error('Failed to update section')
@@ -252,17 +201,20 @@ const EditSection = ({
         ...state,
         section: {
           ...state.section,
-          list: [...state.section.list.map(sec => {
-            return sec.id === sectionId ? {
-              ...sec,
-              title: data.sectionName,
-              description: data.sectionDescription
-            } : sec;
-          })]
+          list: [
+            ...state.section.list.map(sec => {
+              return sec.id === sectionId
+                ? {
+                    ...sec,
+                    title: data.sectionName,
+                    description: data.sectionDescription
+                  }
+                : sec
+            })
+          ]
         }
       }))
     } catch (error) {
-      console.log(error)
       toast.error('Something went wrong')
     }
   }
@@ -277,38 +229,24 @@ const EditSection = ({
       <DrawerContent>
         <div className='min-h-[300px] w-[600px] mx-auto py-10'>
           <h1 className='text-lg font-medium mb-4 font-display'>
-            Edit Section for{' '}
-            {
-              state.course.list.find(
-                course => course.id === state.course.selectedCourseId
-              )?.name
-            }
+            Edit Section for {state.course.list.find(course => course.id === state.course.selectedCourseId)?.name}
           </h1>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleUpdate)}
-              className='w-full space-y-6'>
+            <form onSubmit={form.handleSubmit(handleUpdate)} className='w-full space-y-6'>
               <FormItem>
                 <FormLabel htmlFor='sectionName' className='block'>
                   Section Name
                 </FormLabel>
                 <Input id='sectionName' {...form.register('sectionName')} />
-                <FormMessage>
-                  {form.formState.errors.sectionName?.message}
-                </FormMessage>
+                <FormMessage>{form.formState.errors.sectionName?.message}</FormMessage>
               </FormItem>
 
               <FormItem>
                 <FormLabel htmlFor='sectionDescription' className='block'>
                   Section Description
                 </FormLabel>
-                <Textarea
-                  id='sectionDescription'
-                  {...form.register('sectionDescription')}
-                />
-                <FormMessage>
-                  {form.formState.errors.sectionDescription?.message}
-                </FormMessage>
+                <Textarea id='sectionDescription' {...form.register('sectionDescription')} />
+                <FormMessage>{form.formState.errors.sectionDescription?.message}</FormMessage>
               </FormItem>
 
               <Button variant={'default'} size={'lg'} type='submit'>

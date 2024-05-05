@@ -18,7 +18,7 @@ export const countries = new Map([
   ['ca', 'Canada'],
   ['th', 'Thailand'],
   ['gn', 'Guinea'],
-  ['la', "Laos"],
+  ['la', 'Laos'],
   ['gd', 'Grenada'],
   ['fi', 'Finland']
 ])

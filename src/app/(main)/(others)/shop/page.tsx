@@ -3,7 +3,6 @@
 import { Button } from '@/components/Button/Button'
 import { useGlobalState } from '@/hooks/useGlobalState'
 import { ICONS } from '@/lib/Icons'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { fillHearts } from '@/actions/global'
 import { useState } from 'react'
@@ -126,7 +125,9 @@ export default function ShopPage() {
               <p className='text-muted-foreground leading-6'>
                 {user.tier !== 'FREE' ? (
                   <div>
-                    <p className='text-white rounded-full text-sm px-3 pt-1 mt-1 premium-cta border border-premium-default/50'>Super is activated</p>
+                    <p className='text-white rounded-full text-sm px-3 pt-1 mt-1 premium-cta border border-premium-default/50'>
+                      Super is activated
+                    </p>
                   </div>
                 ) : (
                   'Never run out of hearts with super!'

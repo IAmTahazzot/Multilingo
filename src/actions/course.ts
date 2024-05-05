@@ -32,8 +32,6 @@ export const SaveCourse = async (courseCode: keyof typeof languages) => {
 }
 
 export const deleteCourse = async (courseId: string) => {
-  console.log(courseId)
-  console.log('---------')
   const deletedCourse = await db.course.delete({
     where: {
       id: courseId

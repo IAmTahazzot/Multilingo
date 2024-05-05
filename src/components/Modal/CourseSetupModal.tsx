@@ -3,19 +3,16 @@
 import { ModalType, useModal } from '@/hooks/useModal'
 import { Course } from '@prisma/client'
 import { Card } from '../Card/Card'
-import Image from 'next/image'
 import { Button } from '../Button/Button'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { enrollUser } from '@/actions/course'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 export const CourseSetupModal = () => {
   const { isOpen, closeModal, data, type } = useModal()
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null)
   const [enrolling, setEnrolling] = useState(false)
-  const router = useRouter()
 
   if (!isOpen || type !== ModalType.COURSE_SETUP) {
     return null

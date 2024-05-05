@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { LessonStateProps } from '@/lib/types'
 
 export const SelectCourse = ({ state, setState }: LessonStateProps) => {
@@ -18,7 +12,7 @@ export const SelectCourse = ({ state, setState }: LessonStateProps) => {
             ...prev,
             section: {
               ...prev.section,
-              selectedSectionId: null,
+              selectedSectionId: null
             },
             unit: {
               selectedUnitId: null,
@@ -41,16 +35,10 @@ export const SelectCourse = ({ state, setState }: LessonStateProps) => {
       </SelectTrigger>
       <SelectContent>
         {state.course.list.map(course => (
-          <SelectItem
-            value={course.id}
-            key={course.id}
-            className='cursor-pointer'>
+          <SelectItem value={course.id} key={course.id} className='cursor-pointer'>
             <div className='flex items-center gap-x-2 py-3'>
               <svg className='h-8 w-10'>
-                <use
-                  xlinkHref={'/svg/flags.svg#' + course.language}
-                  className='scale-[.5]'
-                />
+                <use xlinkHref={'/svg/flags.svg#' + course.language} className='scale-[.5]' />
               </svg>
               <span>{course.name}</span>
             </div>

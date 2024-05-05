@@ -16,8 +16,8 @@ export type State = {
   lesson: {
     selectedLessonId: number | null
     list: Lesson[]
-  },
-  question: (Question & { Option: Option[] })[],
+  }
+  question: (Question & { Option: Option[] })[]
   activeTab: 'section' | 'unit' | 'lesson' | 'question'
 }
 

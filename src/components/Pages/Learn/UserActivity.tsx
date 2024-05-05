@@ -6,7 +6,6 @@ import { UserCourseDetails } from './Activity/UserCourseDetails'
 import { LeaderBoardCard } from './Activity/LeaderboardCard'
 import { useEffect, useState } from 'react'
 import { User } from '@prisma/client'
-import { Loading } from '@/components/Loading/Loading'
 import { usePathname } from 'next/navigation'
 import { Footer } from '@/components/Footer/Footer'
 

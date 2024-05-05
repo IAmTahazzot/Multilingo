@@ -2,21 +2,23 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { LessonStateProps } from '@/lib/types'
-import { Option, Question, QuestionType } from '@prisma/client'
+
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { Form, FormDescription, FormItem, FormLabel } from '@/components/ui/form'
 import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as LR from '@uploadcare/blocks'
 import { Card } from '@/components/Card/Card'
-import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import { createQuestion, updateQuestion } from '@/actions/question'
 import { toast } from 'sonner'
+
+import { z } from 'zod'
+import { Option, Question, QuestionType } from '@prisma/client'
+import { createQuestion, updateQuestion } from '@/actions/question'
+import { cn } from '@/lib/utils'
+import { LessonStateProps } from '@/lib/types'
+import * as LR from '@uploadcare/blocks'
 
 LR.registerBlocks(LR)
 
@@ -96,8 +98,6 @@ export const QuestionForm = ({
   }, [])
 
   const saveQuestion = async (data: z.infer<typeof questionSchema>) => {
-    console.log(data)
-
     if (!state.lesson.selectedLessonId) {
       return toast.warning('Please select a lesson to add a question')
     }
@@ -186,11 +186,13 @@ export const QuestionForm = ({
               <FormLabel htmlFor='q_type'>Question Type</FormLabel>
               {question ? (
                 <div>
-                  <Button variant={'outline'} type='button' disabled id='q_type'>{type}</Button>
+                  <Button variant={'outline'} type='button' disabled id='q_type'>
+                    {type}
+                  </Button>
                 </div>
               ) : (
                 <Select
-                  id='q_type'
+                  // id='q_type'
                   defaultValue={type}
                   onValueChange={(value: 'MULTIPLE_CHOICE_IMAGE' | 'MULTIPLE_CHOICE' | 'REARRANGE' | 'TRUE_FALSE') => {
                     setType(QuestionType[value])
@@ -343,12 +345,6 @@ export const QuestionForm = ({
 
             <FormDescription className='col-span-4'>
               Fill the correct answer by selecting the radio button of the correct option.
-            </FormDescription>
-          </div>
-
-          <div className={cn('hidden grid-cols-1 gap-6', type === QuestionType.REARRANGE && 'grid')}>
-            <FormDescription>
-              [NOTE]: For user the question&apos;s words will be scrubmled as a re-arrange question.
             </FormDescription>
           </div>
 

@@ -178,8 +178,6 @@ export const updateQuestion = async (
         throw new Error('Invalid question type')
     }
   } catch (error) {
-    console.log('----------------------------------- NEW ')
-    console.log(error)
     throw new Error('Something is terribly wrong while updating!')
   }
 }
@@ -326,7 +324,6 @@ export const createQuestion = async (
         throw new Error('Invalid question type')
     }
   } catch (error) {
-    console.log(error)
     throw new Error('Something is terribly wrong!')
   }
 }

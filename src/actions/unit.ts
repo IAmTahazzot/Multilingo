@@ -1,7 +1,6 @@
 'use server';
 
 import { db } from "@/lib/db";
-import { languages } from '@/lib/countries'
 
 export const getUnits = async (sectionId: string) => {
   const units = await db.unit.findMany({

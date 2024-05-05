@@ -4,5 +4,5 @@ export const LoadingMessages: string[] = [
   'More Americans are learning a language on Duolingo than in the U.S. public school system.',
   'More people are learning Irish on Duolingo than there are native Irish speakers.',
   'Protip: After a lesson, write down as many phrases as you can remember from it.',
-  'In Sweden, the most popular language on Duolingo is Swedish (mostly by refugees).',
+  'In Sweden, the most popular language on Duolingo is Swedish (mostly by refugees).'
 ]

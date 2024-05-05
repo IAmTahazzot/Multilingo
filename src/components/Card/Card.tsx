@@ -29,11 +29,7 @@ type CardProps = {
 
 export const Card = ({ children, theme, className, onClick, ...props }: CardProps) => {
   return (
-    <div
-      className={cn(Variants({ theme }), className)}
-      onClick={onClick}
-      {...props}
-      >
+    <div className={cn(Variants({ theme }), className)} onClick={onClick} {...props}>
       {children}
     </div>
   )

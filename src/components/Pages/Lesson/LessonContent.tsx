@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { LessonReview } from './LessonReview'
 import { TrueFalseOptions } from './QuestionTypes/TrueFalse'
 import { XP_PER_QUESTION } from '@/lib/constants'
+// @ts-ignore (No types available)
 import useSound from 'use-sound'
 
 export const LessonContent = () => {
@@ -227,7 +228,6 @@ export const LessonContent = () => {
       return setSelectedDOM(null)
     }
 
-    // console.log(answer, correctOption?.id)
     // answer is the option id
     if (answer === correctOption?.id) {
       // correct

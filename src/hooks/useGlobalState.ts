@@ -1,4 +1,4 @@
-import { Course, Lesson, Option, Question, Section, Unit, User, UserPreferences } from '@prisma/client'
+import { Course, Lesson, Option, Question, Section, Unit, User } from '@prisma/client'
 import { create } from 'zustand'
 import { mountStoreDevtool } from 'simple-zustand-devtools'
 

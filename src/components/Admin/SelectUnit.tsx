@@ -28,9 +28,7 @@ export const SelectUnit = ({ state, setState }: LessonStateProps) => {
   }
 
   return (
-    <div onClick={() => {
-      console.log('You clicked the unit select')
-    }}>
+    <div>
       <Select
         value={state.unit.selectedUnitId || ''}
         onValueChange={(value: string) => {
