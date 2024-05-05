@@ -292,7 +292,7 @@ export const LessonButton: React.FC<LessonButtonProps> = ({
 
           setShowLessonBeginButton(prev => !prev)
         }}
-        className={cn(Variants({ variant }), className, disabled && 'pointer-events-not-allowed')}
+        className={cn(Variants({ variant }), className, 'cursor-pointer', disabled && 'pointer-events-not-allowed')}
         style={style}
         id={id}
         {...props}>
