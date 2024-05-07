@@ -192,7 +192,7 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
     user: getUser,
     course,
     userPreferences: {
-      sound: preferences?.sound || true
+      sound: preferences!.sound
     },
     allCourses: userCourses.map(enrollment => enrollment.course as CourseState),
     enrollmentDetails: {
