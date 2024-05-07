@@ -204,8 +204,5 @@ export const getGlobalState: (courseId?: string) => Promise<GlobalState> = async
     }
   }
 
-  // add to data.json file
-  fs.writeFileSync('data.json', JSON.stringify(data, null, 2))
-
   return data
 }
