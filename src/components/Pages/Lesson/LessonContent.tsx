@@ -254,7 +254,11 @@ export const LessonContent = () => {
       selectedDOM?.classList.remove('border-sky-500', 'bg-sky-100', 'hover:bg-sky-200')
       selectedDOM?.classList.add('border-rose-300', 'bg-rose-100', 'hover:bg-rose-100')
 
-      // Deduct one from the total heart count
+      // Deduct one from the total heart countA
+      if (user.tier !== 'FREE') {
+        return
+      }
+
       try {
         const res = await deductHeart(user.id)
 
