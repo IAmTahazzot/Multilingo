@@ -417,7 +417,7 @@ export const LessonContent = () => {
       </header>
 
       <main className='w-full self-center'>
-        <LessonContentContainer className='mx-6 md:mx-auto max-w-3xl xl:max-w-3xl'>
+        <LessonContentContainer className='mx-6 md:mx-auto max-w-3xl xl:max-w-[700px]'>
           <h1 className='font-display text-[36px] pl-1 mb-14'>{question.title}</h1>
 
           {/* BEGIN: QUESTION OPTIONS USING THEIR OWN TYPE */}
