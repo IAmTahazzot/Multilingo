@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const { course, setUser, setCourse, setAllCourses, setEnrollmentDetails } = useGlobalState()
+  const { course, setUser, setCourse, setAllCourses, setEnrollmentDetails, setUserPreferences } = useGlobalState()
 
   useEffect(() => {
     const gettingUser = async () => {
@@ -33,6 +33,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           setCourse(data.course)
           setAllCourses(data.allCourses)
           setEnrollmentDetails(data.enrollmentDetails)
+          setUserPreferences(data.userPreferences);
         } catch (error) {
           toast.error('An error occured while fetching global state')
         }
